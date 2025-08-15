@@ -1,10 +1,11 @@
 .homeBannerContainer {
     background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), black url('../../../Assets/HomeBanner.jpg');
-    padding: 300px;
+    padding: 250px;
     background-size: cover;
     background-attachment: fixed;
     height: 70vh;
-    border: 3px double;
+    border: 15px double;
+    margin-bottom: 200px;
 }
 
 .homeBannerTitle {
@@ -29,5 +30,18 @@
     color: #000000;
     text-shadow: 0 0 18px rgba(248, 245, 240, 0.8),
         0 0 16px rgba(0, 0, 0, 0.5);
+}
 
+@media (max-width: 767px) {
+    .homeBannerContainer {
+        padding: 0px;
+    }
+
+    .homeBannerTitle {
+        font-size: 50px;
+    }
+
+    .homeBannerTitle2 {
+        font-size: 50px;
+    }
 }

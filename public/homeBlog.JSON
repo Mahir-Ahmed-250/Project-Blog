@@ -1,0 +1,38 @@
+[
+  {
+    "id":1,
+      "blogImg":"https://images.squarespace-cdn.com/content/v1/52fd86dfe4b0a44284e8af84/c6d73058-e097-4804-8d2d-f848eaaff8ff/pexels-karolina-grabowska-4210784.jpeg?format=750w",
+    "blogName":"The Next Thing",
+    "blogDate":"Mar 6, 2024"
+  },
+  {
+    "id":2,
+      "blogImg":"https://images.squarespace-cdn.com/content/v1/52fd86dfe4b0a44284e8af84/1ae83973-d778-4def-8956-2044910ab47f/pexels-leeloo-the-first-5715330.jpg?format=1000w",
+    "blogName":"In Which Teeth Come Up Twice",
+    "blogDate":"Feb 29, 2024"
+  },
+  {
+    "id":3,
+      "blogImg":"https://images.squarespace-cdn.com/content/v1/52fd86dfe4b0a44284e8af84/6c58e7ff-3f56-4b12-8879-cefd2ff6e464/pexels-daniel-jurin-1835718.jpg?format=750w",
+    "blogName":"A Late-Summer Check-In",
+    "blogDate":"Aug 4, 2023"
+  },
+  {
+    "id":4,
+      "blogImg":"https://images.squarespace-cdn.com/content/v1/52fd86dfe4b0a44284e8af84/853b287c-8ec2-47d0-86dd-65dd6e77af99/Four+Words+for+2023+%7C+Freckled+Italian?format=750w",
+    "blogName":"Four Words for 2023",
+    "blogDate":"Dec 31, 2022"
+  },
+  {
+    "id":5,
+      "blogImg":"https://images.squarespace-cdn.com/content/v1/52fd86dfe4b0a44284e8af84/ad0bc8bb-dfb4-4b4d-9766-a44ddc91e0ef/Peterson2022-14.jpg?format=750w",
+    "blogName":"Five",
+    "blogDate":"Nov 21, 2022"
+  },
+  {
+    "id":6,
+      "blogImg":"https://images.squarespace-cdn.com/content/v1/52fd86dfe4b0a44284e8af84/c972a65c-29c7-481e-9cde-cf4d935c38af/Clear+Naked+Whey+Review+%7C+Freckled+Italian?format=500w",
+    "blogName":"Review: Clear Naked Whey ",
+    "blogDate":"Nov 10, 2022"
+  }
+]

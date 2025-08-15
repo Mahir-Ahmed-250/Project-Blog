@@ -1,0 +1,23 @@
+.homeIcon {
+    height: 100px;
+    border: 6px double;
+    border-radius: 50%;
+}
+
+.homeName {
+    font-family: "Great Vibes", cursive;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 40px !important;
+}
+
+@media screen and (max-width: 760px) {
+    .homeIcon {
+        height: 60px;
+        width: 80px;
+    }
+
+    .homeName {
+        font-size: 20px !important;
+    }
+}

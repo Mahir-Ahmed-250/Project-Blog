@@ -1,42 +1,96 @@
-import React from "react";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import HomeIcon from "../../Assets/NavigationHome.png";
-
+import React, {useState} from "react";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import homeIcon from "../../Assets/Home.gif";
+import {Link} from "react-router-dom";
+import {NavDropdown} from "react-bootstrap";
+import "./NavigationBar.css";
 const NavigationBar = () => {
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
+
+  const handleClose = () => setShowOffcanvas(false);
+  const handleShow = () => setShowOffcanvas(true);
+
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary ">
-        <Container>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mx-auto">
-              <NavDropdown
-                title="Blog"
-                id="basic-nav-dropdown"
-                className="my-auto">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
-              <img src={HomeIcon} alt="" height="100px" />
-              <Nav.Link href="#home" className="my-auto">
-                About Me
-              </Nav.Link>
-              <Nav.Link href="#link" className="my-auto">
-                Contact Me
-              </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      {["xxl"].map((expand) => (
+        <Navbar
+          sticky="top"
+          key={expand}
+          expand={expand}
+          className={`mb-3 bg-light`}>
+          <Container>
+            <Link to="/" style={{textDecoration: "none"}}>
+              <Navbar.Brand className="homeName">
+                A Lifestyle Blog By Ariful
+              </Navbar.Brand>
+            </Link>
+            <Navbar.Toggle
+              aria-controls={`offcanvasNavbar-expand-${expand}`}
+              onClick={handleShow}
+            />
+            <Navbar.Offcanvas
+              show={showOffcanvas}
+              onHide={handleClose}
+              id={`offcanvasNavbar-expand-${expand}`}
+              aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
+              placement="start">
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
+                  <h1 className="homeName">A Lifestyle Blog By Ariful</h1>
+                </Offcanvas.Title>
+              </Offcanvas.Header>
+
+              <Offcanvas.Body>
+                <Nav className="justify-content-end flex-grow-1 pe-3">
+                  <img src={homeIcon} alt="" className="homeIcon mx-auto" />
+                  <NavDropdown
+                    title="Blog"
+                    id="blog-dropdown"
+                    className="homeLink my-auto"
+                    onClick={(e) => e.stopPropagation()} // Prevents dropdown from closing Offcanvas immediately
+                  >
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/blog/post1"
+                      onClick={handleClose}>
+                      Everyday Lifestyle
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/blog/post2"
+                      onClick={handleClose}>
+                      Health and Wellness
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/blog/post3"
+                      onClick={handleClose}>
+                      Event and Successful People
+                    </NavDropdown.Item>
+                  </NavDropdown>
+
+                  {/* Other Links */}
+                  <Nav.Link
+                    href="#About Me"
+                    className="homeLink my-auto"
+                    onClick={handleClose}>
+                    About Me
+                  </Nav.Link>
+                  <Nav.Link
+                    href="#Contact Me"
+                    className="homeLink my-auto"
+                    onClick={handleClose}>
+                    Contact Me
+                  </Nav.Link>
+                </Nav>
+              </Offcanvas.Body>
+            </Navbar.Offcanvas>
+          </Container>
+        </Navbar>
+      ))}
     </>
   );
 };
