@@ -21,14 +21,14 @@
 }
 
 .homeBannerTitle2 {
-    font-family: "Updock";
+    font-family: "Freeman", sans-serif;
     font-weight: 800;
     font-style: normal;
     text-align: center;
-    font-size: 100px;
-    color: #000000;
+    font-size: 60px;
+    color: #3d3d3d;
     text-shadow: 0 0 18px rgba(248, 245, 240, 0.8),
-        0 0 16px rgba(0, 0, 0, 0.5);
+        0 0 16px rgba(211, 211, 211, 0.5);
 }
 
 @media (max-width: 1024px) {
