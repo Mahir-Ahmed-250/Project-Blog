@@ -1,0 +1,67 @@
+.homeAboutMeContainer {
+    display: flex;
+    /* vertically center */
+    justify-content: center;
+    /* centers the whole row */
+    text-align: center;
+    margin-top: 100px;
+}
+
+.homeAboutMeContainer>div {
+    flex: 1;
+    /* each child takes equal width */
+}
+
+.homeAboutMeImg {
+    max-width: 100%;
+    /* adjust size */
+    border: 25px solid #f8f5f0;
+    /* optional circle */
+    margin: 0 auto;
+    /* ensure image stays centered in its column */
+    display: block;
+    margin-left: 20px;
+}
+
+.homeAboutMeText1 {
+    font-family: "Updock";
+    font-weight: 800;
+    font-style: normal;
+    text-align: center;
+    font-size: 80px;
+}
+
+.homeAboutMeText1Desc {
+    text-align: justify;
+    font-style: italic;
+}
+
+.homeAboutMeText2 {
+    font-size: 50px;
+    text-align: right;
+}
+
+.homeAboutMeSocialMediaLink {
+    font-size: 20px;
+    margin-left: 100px;
+
+}
+
+@media (max-width: 1024px) {
+    .homeAboutMeContainer {
+        flex-direction: column;
+    }
+
+    .homeAboutMeSocialMediaLink {
+        margin-left: 0px;
+    }
+
+    .homeAboutMeText2 {
+        font-size: 40px;
+        text-align: center;
+    }
+
+    .homeAboutMeImg {
+        margin-left: 0px;
+    }
+}

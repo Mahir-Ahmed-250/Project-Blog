@@ -1,0 +1,18 @@
+.homeContactMeContainer {
+    margin-top: 100px;
+    position: relative;
+    background: rgb(255, 255, 255) url('../../../Assets/HomeContactMe.jpg') center/cover fixed no-repeat;
+    z-index: 0;
+    /* ensures overlay can sit above */
+    height: 50vh;
+}
+
+.homeContactMeContainer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(85, 85, 85, 0.247);
+    /* change 0.3 for more/less opacity */
+    z-index: -1;
+    /* put behind content but above bg image */
+}
