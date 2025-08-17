@@ -4,7 +4,7 @@
     background: rgb(255, 255, 255) url('../../../Assets/HomeContactMe.jpg') center/cover fixed no-repeat;
     z-index: 0;
     /* ensures overlay can sit above */
-    height: 50vh;
+    padding: 100px;
 }
 
 .homeContactMeContainer::before {
