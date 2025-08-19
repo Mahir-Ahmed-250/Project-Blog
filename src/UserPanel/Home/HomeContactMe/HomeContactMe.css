@@ -16,3 +16,9 @@
     z-index: -1;
     /* put behind content but above bg image */
 }
+
+@media (max-width: 1024px) {
+    .homeContactMeContainer {
+        padding: 0;
+    }
+}
