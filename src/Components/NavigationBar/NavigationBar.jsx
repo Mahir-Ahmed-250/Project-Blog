@@ -45,7 +45,13 @@ const NavigationBar = () => {
 
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <img src={homeIcon} alt="" className="homeIcon mx-auto" />
+                  <Link
+                    to="/"
+                    style={{textDecoration: "none", color: "black"}}
+                    className="mx-auto">
+                    <img src={homeIcon} alt="" className="homeIcon" />
+                  </Link>
+
                   <NavDropdown
                     title="Blog"
                     id="blog-dropdown"
@@ -54,19 +60,19 @@ const NavigationBar = () => {
                   >
                     <NavDropdown.Item
                       as={Link}
-                      to="/blog/post1"
+                      to="/blog/everydayLifestyle"
                       onClick={handleClose}>
                       Everyday Lifestyle
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       as={Link}
-                      to="/blog/post2"
+                      to="/blog/healthAndWellness"
                       onClick={handleClose}>
                       Health and Wellness
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       as={Link}
-                      to="/blog/post3"
+                      to="/blog/eventAndSuccessfulPeople"
                       onClick={handleClose}>
                       Event and Successful People
                     </NavDropdown.Item>

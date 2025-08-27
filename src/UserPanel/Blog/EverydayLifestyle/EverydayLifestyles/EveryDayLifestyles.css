@@ -1,0 +1,8 @@
+.everydayLifestyleBannerContainer {
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), black url('../../../../Assets/Lifestyle.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    height: 80vh;
+    border: 15px double;
+    margin-bottom: 200px;
+}
