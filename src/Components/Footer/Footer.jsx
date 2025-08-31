@@ -36,37 +36,7 @@ const Footer = () => {
           </Col>
 
           {/* Quick Links */}
-          <Col md={4} className="mb-4">
-            <h5 style={{fontWeight: "600", color: "#000"}}>Quick Links</h5>
-            <ul className="list-unstyled">
-              <li>
-                <a href="/" style={{color: "#444", textDecoration: "none"}}>
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/blogs"
-                  style={{color: "#444", textDecoration: "none"}}>
-                  Blogs
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/about"
-                  style={{color: "#444", textDecoration: "none"}}>
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/contact"
-                  style={{color: "#444", textDecoration: "none"}}>
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </Col>
+          <Col md={4} className="mb-4"></Col>
 
           {/* Social Icons */}
           <Col md={4} className="mb-4">

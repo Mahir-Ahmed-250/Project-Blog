@@ -91,6 +91,12 @@ const NavigationBar = () => {
                     onClick={handleClose}>
                     Contact Me
                   </Nav.Link>
+                  <Nav.Link
+                    href="#Shop"
+                    className="homeLink my-auto"
+                    onClick={handleClose}>
+                    Shop
+                  </Nav.Link>
                 </Nav>
               </Offcanvas.Body>
             </Navbar.Offcanvas>
