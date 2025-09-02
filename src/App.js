@@ -5,6 +5,7 @@ import Footer from "./Components/Footer/Footer";
 import EverydayLifestyles from "./UserPanel/Blog/EverydayLifestyle/EverydayLifestyles/EverydayLifestyles";
 import HealthAndWellnessS from "./UserPanel/Blog/HealthAndWellness/HealthAndWellnessS/HealthAndWellnessS";
 import EventAndSuccessfulPeoples from "./UserPanel/Blog/EventAndSuccessfulPeople/EventAndSuccessfulPeoples/EventAndSuccessfulPeoples";
+import EventAndSuccessfulPeople from "./UserPanel/Blog/EventAndSuccessfulPeople/EventAndSuccessfulPeople/EventAndSuccessfulPeople";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/blog/everydayLifestyle" element={<EverydayLifestyles />} />
         <Route path="/blog/healthAndWellness" element={<HealthAndWellnessS />} />
         <Route path="/blog/eventAndSuccessfulPeople" element={<EventAndSuccessfulPeoples />} />
+        <Route path="/blog/everyday-lifestyle/:slug" element={<EventAndSuccessfulPeople />} />
       </Routes>
       <Footer />
     </>

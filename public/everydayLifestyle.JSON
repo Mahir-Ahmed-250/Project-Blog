@@ -18,30 +18,75 @@
     "publishedAt": "2025-08-22T10:30:00.000Z"
   },
   {
-    "title": "Yoga for Stress Relief",
-    "slug": "yoga-for-stress-relief",
-    "tags": ["yoga", "mental health"],
-    "cover": "https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg",
-    "content": "<p>Yoga reduces stress and improves mental health.</p><img src='https://images.pexels.com/photos/317157/pexels-photo-317157.jpeg' alt='Meditation Pose' /><p>Even 15 minutes of deep breathing can refresh your mind.</p>",
-    "readingTime": 6,
-    "publishedAt": "2025-08-25T07:45:00.000Z"
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
   },
   {
-    "title": "Top 5 Superfoods You Must Try",
-    "slug": "top-5-superfoods",
-    "tags": ["nutrition", "superfoods"],
-    "cover": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
-    "content": "<p>Superfoods are nutrient-rich and boost overall health.</p><img src='https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg' alt='Superfoods Bowl' /><p>Try blueberries, quinoa, salmon, kale, and chia seeds.</p>",
-    "readingTime": 3,
-    "publishedAt": "2025-08-27T12:00:00.000Z"
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
   },
   {
-    "title": "Home Workout Without Equipment",
-    "slug": "home-workout-no-equipment",
-    "tags": ["fitness", "workout"],
-    "cover": "https://images.pexels.com/photos/414029/pexels-photo-414029.jpeg",
-    "content": "<p>You don’t need equipment to stay fit.</p><img src='https://images.pexels.com/photos/3757379/pexels-photo-3757379.jpeg' alt='Home Workout' /><p>Push-ups, squats, and planks are great for building strength at home.</p>",
-    "readingTime": 7,
-    "publishedAt": "2025-08-30T08:15:00.000Z"
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
+  },
+  {
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
+  },
+  {
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
+  },
+  {
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
+  },
+  {
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
+  },
+  {
+    "title": "Balanced Diet for Everyday",
+    "slug": "balanced-diet-everyday",
+    "tags": ["diet", "nutrition"],
+    "cover": "https://images.pexels.com/photos/1654760/pexels-photo-1654760.jpeg",
+    "content": "<p>A balanced diet is essential for good health.</p><img src='https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' alt='Fruits and Vegetables' /><p>Include fruits, vegetables, proteins, and whole grains in your meals.</p>",
+    "readingTime": 5,
+    "publishedAt": "2025-08-22T10:30:00.000Z"
   }
 ]

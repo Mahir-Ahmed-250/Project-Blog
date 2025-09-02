@@ -1,0 +1,9 @@
+.post-content img {
+    max-width: 100%;
+    height: 500px;
+    display: block;
+    margin: 20px auto;
+    /* center এ সুন্দরভাবে বসবে */
+    border-radius: 10px;
+    /* চাইলে একটু গোলাকার দিতে পারেন */
+}
