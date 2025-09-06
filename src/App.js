@@ -6,6 +6,8 @@ import EverydayLifestyles from "./UserPanel/Blog/EverydayLifestyle/EverydayLifes
 import HealthAndWellnessS from "./UserPanel/Blog/HealthAndWellness/HealthAndWellnessS/HealthAndWellnessS";
 import EventAndSuccessfulPeoples from "./UserPanel/Blog/EventAndSuccessfulPeople/EventAndSuccessfulPeoples/EventAndSuccessfulPeoples";
 import EventAndSuccessfulPeople from "./UserPanel/Blog/EventAndSuccessfulPeople/EventAndSuccessfulPeople/EventAndSuccessfulPeople";
+import ContactMe from "./UserPanel/ContactMe/ContactMe";
+import AboutMe from "./UserPanel/AboutMe/AboutMe";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/blog/healthAndWellness" element={<HealthAndWellnessS />} />
         <Route path="/blog/eventAndSuccessfulPeople" element={<EventAndSuccessfulPeoples />} />
         <Route path="/blog/everyday-lifestyle/:slug" element={<EventAndSuccessfulPeople />} />
+        <Route path="/contact" element={<ContactMe />} />
+        <Route path="/about" element={<AboutMe />} />
       </Routes>
       <Footer />
     </>

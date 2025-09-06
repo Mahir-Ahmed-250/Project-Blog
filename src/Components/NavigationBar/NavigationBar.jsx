@@ -80,13 +80,15 @@ const NavigationBar = () => {
 
                   {/* Other Links */}
                   <Nav.Link
-                    href="#About Me"
+                    as={Link}
+                    to="/about"
                     className="homeLink my-auto"
                     onClick={handleClose}>
                     About Me
                   </Nav.Link>
                   <Nav.Link
-                    href="#Contact Me"
+                    as={Link}
+                    to="/contact"
                     className="homeLink my-auto"
                     onClick={handleClose}>
                     Contact Me

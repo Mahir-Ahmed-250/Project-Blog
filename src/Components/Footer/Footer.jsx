@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import {Container, Row, Col} from "react-bootstrap";
 import {FaFacebook, FaTwitter, FaInstagram, FaGithub} from "react-icons/fa";
@@ -40,7 +41,7 @@ const Footer = () => {
 
           {/* Social Icons */}
           <Col md={4} className="mb-4">
-            <h5 style={{fontWeight: "600", color: "#000"}}>Follow Us</h5>
+            <h5 style={{fontWeight: "600", color: "#000"}}>Follow Me</h5>
             <div>
               <a
                 href="#"
