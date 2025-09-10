@@ -4,5 +4,19 @@
     background-attachment: fixed;
     height: 80vh;
     border: 15px double;
-    margin-bottom: 200px;
+    margin-bottom: 100px;
+}
+
+
+.homeAboutMeImg {
+    float: right;
+    /* image sits on the right */
+    margin: 0 0 1rem 1rem;
+    /* spacing from text */
+    max-width: 450px;
+    /* control image size */
+    width: 100%;
+    height: 500px;
+    border-radius: 8px;
+    /* optional: rounded look */
 }

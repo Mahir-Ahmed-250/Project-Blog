@@ -94,7 +94,8 @@ const NavigationBar = () => {
                     Contact Me
                   </Nav.Link>
                   <Nav.Link
-                    href="#Shop"
+                    as={Link}
+                    to="/shops"
                     className="homeLink my-auto"
                     onClick={handleClose}>
                     Shop
