@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lottiefiles/lottie-player": "^2.0.12",
+    "@lottiefiles/react-lottie-player": "^3.6.0",
     "@react-icons/all-files": "^4.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

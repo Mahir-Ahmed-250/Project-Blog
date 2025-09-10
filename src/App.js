@@ -8,6 +8,7 @@ import EventAndSuccessfulPeoples from "./UserPanel/Blog/EventAndSuccessfulPeople
 import EventAndSuccessfulPeople from "./UserPanel/Blog/EventAndSuccessfulPeople/EventAndSuccessfulPeople/EventAndSuccessfulPeople";
 import ContactMe from "./UserPanel/ContactMe/ContactMe";
 import AboutMe from "./UserPanel/AboutMe/AboutMe";
+import Shops from "./UserPanel/Shop/Shops/Shops";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/blog/everyday-lifestyle/:slug" element={<EventAndSuccessfulPeople />} />
         <Route path="/contact" element={<ContactMe />} />
         <Route path="/about" element={<AboutMe />} />
+        <Route path="/shops" element={<Shops />} />
       </Routes>
       <Footer />
     </>
