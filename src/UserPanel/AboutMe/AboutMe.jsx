@@ -18,7 +18,7 @@ const AboutMe = () => {
         <br />
         <br />
         <br />
-        <h1 className="homeBannerTitle">About Me</h1>
+        <h1 className="homeBannerTitle">About Me...</h1>
       </div>
     </>
   );
