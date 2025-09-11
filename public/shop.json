@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "shopItemName": "ExcelVLookUp vs XLookUp Discussion",
+    "shopItemImg": "https://i.ytimg.com/vi/-oP3_-c6z-I/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA9AuZUu8yHixTg51Me_n2mJYC8tw",
+    "shopItemLink": "https://www.linkedin.com/"
+  },
+  {
+    "id": 2,
+    "shopItemName": "Fact Table Vs Dimension Table",
+    "shopItemImg": "https://www.simplilearn.com/ice9/free_resources_article_thumb/Fact_Table_vs_dimension_Table.jpg",
+    "shopItemLink": "https://www.facebook.com/"
+  },
+  {
+    "id": 3,
+    "shopItemName": "Web Scraping Data Analytics Activity",
+    "shopItemImg": "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200622222131/What-is-Web-Scraping-and-How-to-Use-It.png",
+    "shopItemLink": "https://www.youtube.com/"
+  },
+  {
+    "id": 4,
+    "shopItemName": "Build Insightful Dashboard for Reporting",
+    "shopItemImg": "https://intellifysolutions.com/wp-content/uploads/2023/07/Dashboard-Design-Principles.jpg",
+    "shopItemLink": "https://www.prothomalo.com/"
+  }
+]
