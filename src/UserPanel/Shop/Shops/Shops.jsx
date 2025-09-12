@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./Shops.css";
 import Carousel from "react-multi-carousel";
 import Shop from "../Shop/Shop";
@@ -57,7 +57,7 @@ const Shops = () => {
         <h1 className="homeBannerTitle">Shop</h1>
       </div>
       <div className="container">
-        <div className="row ">
+        <div className="row shopContainer ">
           <Carousel
             autoPlay
             autoPlaySpeed={2000}
@@ -70,8 +70,7 @@ const Shops = () => {
             responsive={responsive}
             rewind={false}
             slidesToSlide={1}
-            arrows={false}
-          >
+            arrows={true}>
             {shops.map((shop) => (
               <Shop key={shop.id} shop={shop} />
             ))}

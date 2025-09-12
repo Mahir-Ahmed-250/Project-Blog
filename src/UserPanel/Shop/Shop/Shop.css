@@ -1,0 +1,27 @@
+.shopItemCard {
+    height: 250px;
+    text-decoration: none;
+}
+
+.shopItemCard img {
+    height: 180px;
+}
+
+.shopItemName {
+    font-family: "Raleway", sans-serif;
+    color: #151515;
+    font-size: 18px;
+    font-weight: 800;
+    margin-top: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.shopItemDescription {
+    font-family: "Raleway", sans-serif;
+    color: #151515;
+    font-size: 14px;
+    text-align: justify;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
