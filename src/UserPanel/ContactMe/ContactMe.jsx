@@ -2,6 +2,9 @@ import React, {useState} from "react";
 import "./ContactMe.css";
 import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../Assets/Contact.json";
+import emailjs from "emailjs-com";
+import Swal from "sweetalert2";
+
 const ContactMe = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -27,13 +30,11 @@ const ContactMe = () => {
       return "⚠️ Please fill out all fields.";
     }
 
-    // Phone number validation (Bangladesh format or generic international)
     const phoneRegex = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
     if (!phoneRegex.test(phone)) {
       return "📞 Please enter a valid phone number.";
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "📧 Please enter a valid email address.";
@@ -50,23 +51,44 @@ const ContactMe = () => {
       return;
     }
 
-    console.log("Form Submitted:", formData);
-    alert("✅ Message sent successfully!");
-    setFormData({name: "", phone: "", email: "", message: ""});
+    // EmailJS integration
+    emailjs
+      .send(
+        "service_4ddu4bf", // replace with your EmailJS service ID
+        "template_4cygi9n", // replace with your EmailJS template ID
+        {
+          user_name: formData.name, // Template এর {{user_name}}
+          user_email: formData.email, // Template এর {{user_email}}
+          user_phone: formData.phone, // Template এর {{user_phone}}
+          message: formData.message, // Template এর {{message}}
+        },
+        "AcR0s8wjTA5hNRWlG" // replace with your EmailJS public key
+      )
+      .then(
+        () => {
+          Swal.fire({
+            icon: "success",
+            title: "✅ Message Sent!",
+            text: "Your message has been delivered successfully.",
+            confirmButtonColor: "#3085d6",
+          });
+          setFormData({name: "", phone: "", email: "", message: ""});
+        },
+        (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "❌ Failed to Send",
+            text: "Something went wrong. Please try again later.",
+            confirmButtonColor: "#d33",
+          });
+          console.error("EmailJS Error:", error);
+        }
+      );
   };
+
   return (
     <>
       <div className="contactMeBannerContainer">
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
         <br />
         <br />
         <h1 className="homeBannerTitle">Contact Me</h1>
@@ -83,7 +105,7 @@ const ContactMe = () => {
         <div
           className="contact-form p-4 rounded-4 shadow-lg w-100"
           style={{maxWidth: "500px"}}>
-          <form onSubmit={handleSubmit} noValidate>
+          <form onSubmit={handleSubmit} noValidate className="mt-5">
             <div className="mb-3">
               <label className="form-label">Full Name</label>
               <input
