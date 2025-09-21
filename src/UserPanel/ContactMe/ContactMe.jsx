@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./ContactMe.css";
-import {Player} from "@lottiefiles/react-lottie-player";
+import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from "../../Assets/Contact.json";
 import emailjs from "emailjs-com";
 import Swal from "sweetalert2";
@@ -24,7 +24,7 @@ const ContactMe = () => {
   };
 
   const validateForm = () => {
-    const {name, phone, email, message} = formData;
+    const { name, phone, email, message } = formData;
 
     if (!name || !phone || !email || !message) {
       return "⚠️ Please fill out all fields.";
@@ -46,8 +46,14 @@ const ContactMe = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationError = validateForm();
+
     if (validationError) {
       setError(validationError);
+      Swal.fire({
+        icon: "error",
+        title: validationError,
+        confirmButtonColor: "#d33",
+      });
       return;
     }
 
@@ -72,7 +78,7 @@ const ContactMe = () => {
             text: "Your message has been delivered successfully.",
             confirmButtonColor: "#3085d6",
           });
-          setFormData({name: "", phone: "", email: "", message: ""});
+          setFormData({ name: "", phone: "", email: "", message: "" });
         },
         (error) => {
           Swal.fire({
@@ -91,6 +97,16 @@ const ContactMe = () => {
       <div className="contactMeBannerContainer">
         <br />
         <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
         <h1 className="homeBannerTitle">Contact Me</h1>
       </div>
       <div className="d-flex justify-content-evenly">
@@ -99,12 +115,13 @@ const ContactMe = () => {
             autoplay
             loop
             src={animationData}
-            style={{width: "100%", height: "70vh"}}
+            style={{ width: "100%", height: "70vh" }}
           />
         </div>
         <div
           className="contact-form p-4 rounded-4 shadow-lg w-100"
-          style={{maxWidth: "500px"}}>
+          style={{ maxWidth: "500px" }}
+        >
           <form onSubmit={handleSubmit} noValidate className="mt-5">
             <div className="mb-3">
               <label className="form-label">Full Name</label>
@@ -150,10 +167,9 @@ const ContactMe = () => {
                 placeholder="Type your message..."
                 name="message"
                 value={formData.message}
-                onChange={handleChange}></textarea>
+                onChange={handleChange}
+              ></textarea>
             </div>
-
-            {error && <p className="text-danger fw-semibold">{error}</p>}
 
             <div className="d-grid">
               <button
@@ -164,7 +180,8 @@ const ContactMe = () => {
                   color: "#020202d3",
                   borderRadius: "8px",
                   padding: "10px",
-                }}>
+                }}
+              >
                 Send Message
               </button>
             </div>

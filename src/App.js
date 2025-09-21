@@ -9,11 +9,14 @@ import EventAndSuccessfulPeople from "./UserPanel/Blog/EventAndSuccessfulPeople/
 import ContactMe from "./UserPanel/ContactMe/ContactMe";
 import AboutMe from "./UserPanel/AboutMe/AboutMe";
 import Shops from "./UserPanel/Shop/Shops/Shops";
+import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
+
 
 function App() {
   return (
     <>
       <NavigationBar />
+      <ScrollToTop />  {/* ✅ auto scroll on route change */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
