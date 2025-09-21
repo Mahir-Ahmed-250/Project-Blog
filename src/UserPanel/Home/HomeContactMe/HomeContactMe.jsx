@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "./HomeContactMe.css";
 import Title from "../../../Components/Title/Title";
 import emailjs from "emailjs-com";
-import Swal from "sweetalert2";
+import {toast, ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HomeContactMe = () => {
   const [formData, setFormData] = useState({
@@ -11,34 +12,42 @@ const HomeContactMe = () => {
     email: "",
     message: "",
   });
+
   const [error, setError] = useState("");
+
+  const validateField = (name, value) => {
+    if (!value) return false;
+
+    if (name === "phone") {
+      const phoneRegex = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
+      return phoneRegex.test(value);
+    }
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(value);
+    }
+    return true; // name + message only need non-empty
+  };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setError(""); // clear error while typing
-    console.log(error);
+    setError("");
   };
 
   const validateForm = () => {
-    const { name, phone, email, message } = formData;
-
+    const {name, phone, email, message} = formData;
     if (!name || !phone || !email || !message) {
       return "⚠️ Please fill out all fields.";
     }
-
-    const phoneRegex = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
-    if (!phoneRegex.test(phone)) {
+    if (!validateField("phone", phone)) {
       return "📞 Please enter a valid phone number.";
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!validateField("email", email)) {
       return "📧 Please enter a valid email address.";
     }
-
     return "";
   };
 
@@ -48,58 +57,32 @@ const HomeContactMe = () => {
 
     if (validationError) {
       setError(validationError);
-      Swal.fire({
-        icon: "error",
-        title: validationError,
-        confirmButtonColor: "#d33",
-        showClass: { popup: "" }, // disable animation
-        hideClass: { popup: "" },
-        scrollbarPadding: false, // stop layout shift
-        allowOutsideClick: false, // prevent background clicks
-        allowEscapeKey: false, // prevent closing with Esc
-      });
+      toast.error(validationError, {autoClose: 4000});
       return;
     }
 
-    // EmailJS integration
     emailjs
       .send(
-        "service_4ddu4bf", // replace with your EmailJS service ID
-        "template_4cygi9n", // replace with your EmailJS template ID
+        "service_4ddu4bf",
+        "template_4cygi9n",
         {
           user_name: formData.name,
           user_email: formData.email,
           user_phone: formData.phone,
           message: formData.message,
         },
-        "AcR0s8wjTA5hNRWlG" // replace with your EmailJS public key
+        "AcR0s8wjTA5hNRWlG"
       )
       .then(
         () => {
-          Swal.fire({
-            icon: "success",
-            title: "✅ Message Sent!",
-            text: "Your message has been delivered successfully.",
-            confirmButtonColor: "#3085d6",
-            showClass: { popup: "" },
-            hideClass: { popup: "" },
-            scrollbarPadding: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
+          toast.success("✅ Message Sent! Your message has been delivered.", {
+            autoClose: 4000,
           });
-          setFormData({ name: "", phone: "", email: "", message: "" });
+          setFormData({name: "", phone: "", email: "", message: ""});
         },
         (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "❌ Failed to Send",
-            text: "Something went wrong. Please try again later.",
-            confirmButtonColor: "#d33",
-            showClass: { popup: "" },
-            hideClass: { popup: "" },
-            scrollbarPadding: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
+          toast.error("❌ Failed to send. Please try again later.", {
+            autoClose: 4000,
           });
           console.error("EmailJS Error:", error);
         }
@@ -112,10 +95,10 @@ const HomeContactMe = () => {
       <div className="d-flex justify-content-center">
         <div
           className="contact-form p-4 rounded-4 shadow-lg w-100"
-          style={{ maxWidth: "500px" }}
-        >
+          style={{maxWidth: "500px"}}>
           <form onSubmit={handleSubmit} noValidate>
-            <div className="mb-3">
+            {/* Name */}
+            <div className="mb-3 position-relative">
               <label className="form-label">Full Name</label>
               <input
                 type="text"
@@ -125,9 +108,18 @@ const HomeContactMe = () => {
                 value={formData.name}
                 onChange={handleChange}
               />
+              {formData.name && (
+                <span
+                  className={`validation-icon ${
+                    validateField("name", formData.name) ? "valid" : "invalid"
+                  }`}>
+                  {validateField("name", formData.name) ? "✔" : "✖"}
+                </span>
+              )}
             </div>
 
-            <div className="mb-3">
+            {/* Phone */}
+            <div className="mb-3 position-relative">
               <label className="form-label">Phone Number</label>
               <input
                 type="tel"
@@ -137,9 +129,18 @@ const HomeContactMe = () => {
                 value={formData.phone}
                 onChange={handleChange}
               />
+              {formData.phone && (
+                <span
+                  className={`validation-icon ${
+                    validateField("phone", formData.phone) ? "valid" : "invalid"
+                  }`}>
+                  {validateField("phone", formData.phone) ? "✔" : "✖"}
+                </span>
+              )}
             </div>
 
-            <div className="mb-3">
+            {/* Email */}
+            <div className="mb-3 position-relative">
               <label className="form-label">Email Address</label>
               <input
                 type="email"
@@ -149,9 +150,18 @@ const HomeContactMe = () => {
                 value={formData.email}
                 onChange={handleChange}
               />
+              {formData.email && (
+                <span
+                  className={`validation-icon ${
+                    validateField("email", formData.email) ? "valid" : "invalid"
+                  }`}>
+                  {validateField("email", formData.email) ? "✔" : "✖"}
+                </span>
+              )}
             </div>
 
-            <div className="mb-3">
+            {/* Message */}
+            <div className="mb-3 position-relative">
               <label className="form-label">Message</label>
               <textarea
                 className="form-control"
@@ -159,8 +169,17 @@ const HomeContactMe = () => {
                 placeholder="Type your message..."
                 name="message"
                 value={formData.message}
-                onChange={handleChange}
-              ></textarea>
+                onChange={handleChange}></textarea>
+              {formData.message && (
+                <span
+                  className={`validation-icon ${
+                    validateField("message", formData.message)
+                      ? "valid"
+                      : "invalid"
+                  }`}>
+                  {validateField("message", formData.message) ? "✔" : "✖"}
+                </span>
+              )}
             </div>
 
             <div className="d-grid">
@@ -172,14 +191,20 @@ const HomeContactMe = () => {
                   color: "#020202d3",
                   borderRadius: "8px",
                   padding: "10px",
-                }}
-              >
+                }}>
                 Send Message
               </button>
             </div>
           </form>
         </div>
       </div>
+
+      {/* Toast container */}
+      <ToastContainer
+        position="bottom-right"
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-body"
+      />
     </div>
   );
 };

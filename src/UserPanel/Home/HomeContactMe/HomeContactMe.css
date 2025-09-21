@@ -22,3 +22,20 @@
         padding: 0;
     }
 }
+
+/* Validation icons */
+.validation-icon {
+    position: absolute;
+    right: 12px;
+    top: 38px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.validation-icon.valid {
+    color: green;
+}
+
+.validation-icon.invalid {
+    color: red;
+}

@@ -10,6 +10,7 @@ import ContactMe from "./UserPanel/ContactMe/ContactMe";
 import AboutMe from "./UserPanel/AboutMe/AboutMe";
 import Shops from "./UserPanel/Shop/Shops/Shops";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
+import Login from "./AdminPanel/Login/Login";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/contact" element={<ContactMe />} />
         <Route path="/about" element={<AboutMe />} />
         <Route path="/shops" element={<Shops />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </>

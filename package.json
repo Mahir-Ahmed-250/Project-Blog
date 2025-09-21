@@ -11,7 +11,9 @@
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^13.2.1",
     "bootstrap": "^5.3.7",
+    "dotenv": "^17.2.2",
     "emailjs-com": "^3.2.0",
+    "firebase": "^12.3.0",
     "react": "^19.1.1",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.1",
@@ -19,6 +21,7 @@
     "react-multi-carousel": "^2.8.6",
     "react-router-dom": "^6.30.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^11.0.5",
     "sweetalert2": "^11.23.0",
     "swiper": "^11.2.10",
     "web-vitals": "^2.1.0"
