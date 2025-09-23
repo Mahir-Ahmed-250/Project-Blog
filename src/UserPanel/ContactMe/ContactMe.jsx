@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./ContactMe.css";
-import {Player} from "@lottiefiles/react-lottie-player";
+import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from "../../Assets/Contact.json";
 import emailjs from "emailjs-com";
 import Swal from "sweetalert2";
@@ -35,7 +35,7 @@ const ContactMe = () => {
   };
 
   const validateForm = () => {
-    const {name, phone, email, message} = formData;
+    const { name, phone, email, message } = formData;
     if (!name || !phone || !email || !message) {
       return "⚠️ Please fill out all fields.";
     }
@@ -86,7 +86,7 @@ const ContactMe = () => {
             background: "#f0fff4",
             color: "#1a202c",
           });
-          setFormData({name: "", phone: "", email: "", message: ""});
+          setFormData({ name: "", phone: "", email: "", message: "" });
         },
         (error) => {
           Swal.fire({
@@ -125,13 +125,14 @@ const ContactMe = () => {
             autoplay
             loop
             src={animationData}
-            style={{width: "100%", height: "70vh"}}
+            style={{ width: "100%", height: "70vh" }}
           />
         </div>
 
         <div
           className="contact-form p-4 rounded-4 shadow-lg w-100"
-          style={{maxWidth: "500px"}}>
+          style={{ maxWidth: "500px" }}
+        >
           <form onSubmit={handleSubmit} noValidate className="mt-5">
             {/* Full Name */}
             <div className="mb-3 position-relative">
@@ -154,9 +155,8 @@ const ContactMe = () => {
                 <span
                   className={`validation-icon ${
                     validateField("name", formData.name) ? "valid" : "invalid"
-                  }`}>
-                  {validateField("name", formData.name) ? "✔" : "✖"}
-                </span>
+                  }`}
+                ></span>
               )}
             </div>
 
@@ -181,9 +181,8 @@ const ContactMe = () => {
                 <span
                   className={`validation-icon ${
                     validateField("phone", formData.phone) ? "valid" : "invalid"
-                  }`}>
-                  {validateField("phone", formData.phone) ? "✔" : ""}
-                </span>
+                  }`}
+                ></span>
               )}
             </div>
 
@@ -208,9 +207,8 @@ const ContactMe = () => {
                 <span
                   className={`validation-icon ${
                     validateField("email", formData.email) ? "valid" : "invalid"
-                  }`}>
-                  {validateField("email", formData.email) ? "✔" : ""}
-                </span>
+                  }`}
+                ></span>
               )}
             </div>
 
@@ -229,16 +227,16 @@ const ContactMe = () => {
                 placeholder="Type your message..."
                 name="message"
                 value={formData.message}
-                onChange={handleChange}></textarea>
+                onChange={handleChange}
+              ></textarea>
               {formData.message && (
                 <span
                   className={`validation-icon ${
                     validateField("message", formData.message)
                       ? "valid"
                       : "invalid"
-                  }`}>
-                  {validateField("message", formData.message) ? "✔" : ""}
-                </span>
+                  }`}
+                ></span>
               )}
             </div>
 
@@ -251,7 +249,8 @@ const ContactMe = () => {
                   color: "#020202d3",
                   borderRadius: "8px",
                   padding: "10px",
-                }}>
+                }}
+              >
                 Send Message
               </button>
             </div>
