@@ -1,0 +1,22 @@
+.loginContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.loginForm {
+    border: 10px double rgb(212, 212, 212);
+    border-radius: 20px;
+    padding: 50px;
+}
+
+@media screen and (max-width: 768px) {
+    .loginContainer {
+        flex-direction: column;
+    }
+
+    .loginForm {
+        width: 100%;
+        padding: 20px;
+    }
+}

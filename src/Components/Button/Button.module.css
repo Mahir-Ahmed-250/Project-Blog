@@ -1,0 +1,18 @@
+.btn {
+    border: 3px solid;
+    background: none;
+    font-weight: 700;
+    height: 45px;
+    margin-top: 20px;
+    letter-spacing: 3px;
+    background: linear-gradient(to left, #ffffff 50%, #140f0f 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all .5s ease-in-out;
+}
+
+.btn:hover {
+    background-position: left bottom;
+    border: none;
+    color: #ffffff !important;
+}

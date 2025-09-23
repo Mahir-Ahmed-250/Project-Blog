@@ -1,9 +1,12 @@
 import React from "react";
 import {useState} from "react";
-
-import {Link} from "react-router-dom";
-import {IoHome} from "react-icons/io5";
+import animationData from "../../Assets/Login.json";
 import useFirebase from "../../Hooks/useFirebase";
+import Button from "../../Components/Button/Button";
+import Title from "../../Components/Title/Title";
+import {Player} from "@lottiefiles/react-lottie-player";
+import "./Login.css";
+import {Link} from "react-router-dom";
 
 const Login = () => {
   const {loginUser, loading} = useFirebase();
@@ -48,21 +51,18 @@ const Login = () => {
         </div>
       ) : (
         <>
-          <br />
-          <br />
-          <br />
           <center>
-            {" "}
-            {/* <Title title1="" title2="Admin Login" /> */}
-            <Link to="/" style={{cursor: "pointer", textDecoration: "none"}}>
-              <span className="logoutBtn">
-                <IoHome className="me-1" />
-                Home
-              </span>
-            </Link>
+            <Title title="Admin Login" />
           </center>
-          <div className="loginContainer">
-            <div>{/* <img src={loginImg} alt="" /> */}</div>
+          <div className="container loginContainer">
+            <div>
+              <Player
+                autoplay
+                loop
+                src={animationData}
+                style={{width: "100%", height: "70vh"}}
+              />
+            </div>
             <div className="loginForm">
               <form onSubmit={handleLogin}>
                 <div className="form-outline mb-4">
@@ -100,20 +100,20 @@ const Login = () => {
                   />
                   <label className="form-check-label ms-4">Show Password</label>
                 </div>
-                {/* <Button
+                <Button
                   title="Login"
-                  width="100px"
+                  width="300px"
                   border="2px solid black"
                   color="black"
-                  fontSize="16px"
-                /> */}
+                  fontSize="20px"
+                />
               </form>
+              <p>
+                Don't Have Admin Account?{" "}
+                <Link to="/signUp">Create Now!</Link>{" "}
+              </p>
             </div>
           </div>
-          <br />
-          <br />
-          <br />
-          <br />
         </>
       )}
     </>

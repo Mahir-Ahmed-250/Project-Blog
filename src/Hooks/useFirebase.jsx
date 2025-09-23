@@ -1,79 +1,68 @@
+import {useState, useEffect} from "react";
 import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import {useEffect} from "react";
-import {useState} from "react";
-
 import {getFirestore} from "firebase/firestore";
-import {getStorage} from "firebase/storage";
-
+import initializeFirebase from "../Firebase/firebase.init";
 import {toast} from "react-toastify";
 import Swal from "sweetalert2";
-import initializeFirebase from "../Firebase/firebase.init";
 
-export const auth = getAuth(initializeFirebase());
-export const db = getFirestore(initializeFirebase());
-export const storage = getStorage(initializeFirebase());
+// Initialize Firebase app once
+const firebaseApp = initializeFirebase();
+
+// Initialize services using the app
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
 const useFirebase = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const auth = getAuth();
 
-  // Login User By Email
-  const loginUser = (email, password) => {
+  const loginUser = async (email, password) => {
     setLoading(true);
-    signOut(auth);
-    console.log(user);
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        if (userCredential.user) {
-          Swal(
-            "Welcome!",
-            "Welcome to Your Portfolio Website Admin Panel",
-            "success"
+    try {
+      if (email?.trim() && password.length) {
+        const res = await signInWithEmailAndPassword(auth, email, password);
+        if (res.user.emailVerified) {
+          Swal.fire("Success", "Logged in successfully!", "success");
+        } else {
+          Swal.fire(
+            "Email not verified",
+            "Please verify your email first.",
+            "error"
           );
         }
-      })
-      .catch((error) => {
-        toast.error("Wrong Email or Password");
-      })
-      .finally(() => setLoading(false));
-  };
-
-  // Observer
-  useEffect(() => {
-    const authSubscription = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-        setLoading(false);
       } else {
-        setUser(null);
-        setLoading(false);
+        toast.error("Please fill in all required fields!");
       }
-    });
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return authSubscription;
-  }, [auth]);
-  const logOut = () => {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
-  return {
-    user,
-    loading,
-    loginUser,
-    logOut,
-    db,
-  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser || null);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  return {user, loading, loginUser, logOut, db};
 };
 
+export {auth, db};
 export default useFirebase;

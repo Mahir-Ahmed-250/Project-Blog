@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "./HomeContactMe.css";
 import Title from "../../../Components/Title/Title";
 import emailjs from "emailjs-com";
-import { toast, ToastContainer } from "react-toastify";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const HomeContactMe = () => {
@@ -41,7 +41,7 @@ const HomeContactMe = () => {
   };
 
   const validateForm = () => {
-    const { name, phone, email, message } = formData;
+    const {name, phone, email, message} = formData;
     if (!name || !phone || !email || !message) {
       return "⚠️ Please fill out all fields.";
     }
@@ -64,9 +64,9 @@ const HomeContactMe = () => {
       });
     } else {
       if (type === "error") {
-        toast.error(message, { autoClose: 4000, toastId });
+        toast.error(message, {autoClose: 4000, toastId});
       } else {
-        toast.success(message, { autoClose: 4000, toastId });
+        toast.success(message, {autoClose: 4000, toastId});
       }
     }
   };
@@ -99,7 +99,7 @@ const HomeContactMe = () => {
             "success",
             "✅ Message Sent! Your message has been delivered."
           );
-          setFormData({ name: "", phone: "", email: "", message: "" });
+          setFormData({name: "", phone: "", email: "", message: ""});
         },
         (error) => {
           showToast("error", "❌ Failed to send. Please try again later.");
@@ -114,8 +114,7 @@ const HomeContactMe = () => {
       <div className="d-flex justify-content-center">
         <div
           className="contact-form p-4 rounded-4 shadow-lg w-100"
-          style={{ maxWidth: "500px" }}
-        >
+          style={{maxWidth: "500px"}}>
           <form onSubmit={handleSubmit} noValidate>
             {/* Name */}
             <div className="mb-3 position-relative">
@@ -132,8 +131,7 @@ const HomeContactMe = () => {
                 <span
                   className={`validation-icon ${
                     validateField("name", formData.name) ? "valid" : "invalid"
-                  }`}
-                >
+                  }`}>
                   {validateField("name", formData.name) ? "✔" : "✖"}
                 </span>
               )}
@@ -154,8 +152,7 @@ const HomeContactMe = () => {
                 <span
                   className={`validation-icon ${
                     validateField("phone", formData.phone) ? "valid" : "invalid"
-                  }`}
-                >
+                  }`}>
                   {validateField("phone", formData.phone) ? "✔" : "✖"}
                 </span>
               )}
@@ -176,8 +173,7 @@ const HomeContactMe = () => {
                 <span
                   className={`validation-icon ${
                     validateField("email", formData.email) ? "valid" : "invalid"
-                  }`}
-                >
+                  }`}>
                   {validateField("email", formData.email) ? "✔" : "✖"}
                 </span>
               )}
@@ -192,16 +188,14 @@ const HomeContactMe = () => {
                 placeholder="Type your message..."
                 name="message"
                 value={formData.message}
-                onChange={handleChange}
-              ></textarea>
+                onChange={handleChange}></textarea>
               {formData.message && (
                 <span
                   className={`validation-icon ${
                     validateField("message", formData.message)
                       ? "valid"
                       : "invalid"
-                  }`}
-                >
+                  }`}>
                   {validateField("message", formData.message) ? "✔" : "✖"}
                 </span>
               )}
@@ -216,21 +210,13 @@ const HomeContactMe = () => {
                   color: "#020202d3",
                   borderRadius: "8px",
                   padding: "10px",
-                }}
-              >
+                }}>
                 Send Message
               </button>
             </div>
           </form>
         </div>
       </div>
-
-      {/* Toast container */}
-      <ToastContainer
-        position="bottom-right"
-        toastClassName="custom-toast"
-        bodyClassName="custom-toast-body"
-      />
     </div>
   );
 };
