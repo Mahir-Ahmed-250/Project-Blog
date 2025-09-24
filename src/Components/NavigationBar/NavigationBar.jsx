@@ -1,18 +1,21 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import homeIcon from "../../Assets/Home.gif";
-import {Link} from "react-router-dom";
-import {NavDropdown} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { NavDropdown } from "react-bootstrap";
 import "./NavigationBar.css";
+import useFirebase from "../../Hooks/useFirebase.jsx";
+
 const NavigationBar = () => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleClose = () => setShowOffcanvas(false);
   const handleShow = () => setShowOffcanvas(true);
-
+  const { user, logOut } = useFirebase();
+  console.log(user);
   return (
     <>
       {["xxl"].map((expand) => (
@@ -20,9 +23,10 @@ const NavigationBar = () => {
           sticky="top"
           key={expand}
           expand={expand}
-          className={`mb-3 bg-light`}>
+          className={`mb-3 bg-light`}
+        >
           <Container>
-            <Link to="/" style={{textDecoration: "none"}}>
+            <Link to="/" style={{ textDecoration: "none" }}>
               <Navbar.Brand className="homeName">
                 A Lifestyle Blog By Ariful
               </Navbar.Brand>
@@ -36,7 +40,8 @@ const NavigationBar = () => {
               onHide={handleClose}
               id={`offcanvasNavbar-expand-${expand}`}
               aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-              placement="start">
+              placement="start"
+            >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
                   <h1 className="homeName">A Lifestyle Blog By Ariful</h1>
@@ -47,8 +52,9 @@ const NavigationBar = () => {
                 <Nav className="justify-content-end flex-grow-1 pe-3">
                   <Link
                     to="/"
-                    style={{textDecoration: "none", color: "black"}}
-                    className="mx-auto">
+                    style={{ textDecoration: "none", color: "black" }}
+                    className="mx-auto"
+                  >
                     <img src={homeIcon} alt="" className="homeIcon" />
                   </Link>
 
@@ -61,19 +67,22 @@ const NavigationBar = () => {
                     <NavDropdown.Item
                       as={Link}
                       to="/blog/everydayLifestyle"
-                      onClick={handleClose}>
+                      onClick={handleClose}
+                    >
                       Everyday Lifestyle
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       as={Link}
                       to="/blog/healthAndWellness"
-                      onClick={handleClose}>
+                      onClick={handleClose}
+                    >
                       Health and Wellness
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       as={Link}
                       to="/blog/eventAndSuccessfulPeople"
-                      onClick={handleClose}>
+                      onClick={handleClose}
+                    >
                       Event and Successful People
                     </NavDropdown.Item>
                   </NavDropdown>
@@ -83,23 +92,28 @@ const NavigationBar = () => {
                     as={Link}
                     to="/about"
                     className="homeLink my-auto"
-                    onClick={handleClose}>
+                    onClick={handleClose}
+                  >
                     About Me
                   </Nav.Link>
                   <Nav.Link
                     as={Link}
                     to="/contact"
                     className="homeLink my-auto"
-                    onClick={handleClose}>
+                    onClick={handleClose}
+                  >
                     Contact Me
                   </Nav.Link>
                   <Nav.Link
                     as={Link}
                     to="/shops"
                     className="homeLink my-auto"
-                    onClick={handleClose}>
+                    onClick={handleClose}
+                  >
                     Shop
                   </Nav.Link>
+                  {user ? <span>{user.displayName}</span> : <></>}
+                  {user ? <button onClick={logOut}>LogOut</button> : <></>}
                 </Nav>
               </Offcanvas.Body>
             </Navbar.Offcanvas>

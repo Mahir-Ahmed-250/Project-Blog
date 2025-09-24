@@ -13,6 +13,7 @@ import Login from "./AdminPanel/Login/Login";
 import Wrapper from "./Components/Wrapper/Wrapper";
 import SignUp from "./AdminPanel/SignUp/SignUp";
 import { ToastContainer } from "react-toastify";
+import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 function App() {
 
@@ -31,7 +32,16 @@ function App() {
           <Route path="/about" element={<AboutMe />} />
           <Route path="/shops" element={<Shops />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/signUp" element={<SignUp />}
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                THIS IS DASHBOARD
+              </PrivateRoute>
+            }
+          />
         </Routes>
         <Footer />
         {/* Toast container */}
