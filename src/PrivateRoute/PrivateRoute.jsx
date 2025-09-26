@@ -1,9 +1,9 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import useFirebase from "../Hooks/useFirebase";
 
-const PrivateRoute = ({ children }) => {
-  const { user, loading } = useFirebase();
+const PrivateRoute = ({children}) => {
+  const {user, loading} = useFirebase();
 
   if (loading) {
     return <p>Loading...</p>; // এখানে চাইলে লোডার/অ্যানিমেশন দিতে পারো

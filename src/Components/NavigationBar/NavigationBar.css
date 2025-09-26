@@ -11,6 +11,11 @@
     font-size: 40px !important;
 }
 
+.profileBlankImg {
+    height: 60px;
+    width: 60px;
+}
+
 @media screen and (max-width: 760px) {
     .homeIcon {
         height: 60px;

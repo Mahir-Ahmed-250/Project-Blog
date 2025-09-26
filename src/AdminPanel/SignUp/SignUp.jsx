@@ -1,30 +1,39 @@
 import React, {useState} from "react";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  updateProfile,
-} from "firebase/auth";
-import {auth, db} from "../../Hooks/useFirebase";
-import {doc, setDoc, serverTimestamp} from "firebase/firestore";
 import {Player} from "@lottiefiles/react-lottie-player";
 import {toast} from "react-toastify";
-import Swal from "sweetalert2";
 import {Link, useNavigate} from "react-router-dom";
+import useFirebase from "../../Hooks/useFirebase";
 import animationData from "../../Assets/SignUp.json";
 import Button from "../../Components/Button/Button";
 import Title from "../../Components/Title/Title";
+import profileBlankImg from "../../Assets/ProfileImg.png";
+
 import "./SignUp.css";
 
 const SignUp = () => {
-  const [passwordShown, setPasswordShown] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [profileImg, setProfileImg] = useState(null);
+  const [profileUrl, setProfileUrl] = useState(""); // optional ImgBB URL input
+  const [previewImg, setPreviewImg] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const {signUpUser} = useFirebase();
   const navigate = useNavigate();
+
   const togglePassword = () => setPasswordShown(!passwordShown);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImg(file);
+      setPreviewImg(URL.createObjectURL(file));
+      setProfileUrl(""); // clear URL if file selected
+    }
+  };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -36,59 +45,22 @@ const SignUp = () => {
 
     setLoading(true);
 
-    try {
-      // 1️⃣ Create Firebase Auth user
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+    // Decide whether to use file or URL
+    const profileInput =
+      profileImg || (profileUrl.trim() ? profileUrl.trim() : null);
 
-      // 2️⃣ Update display name in Auth profile
-      await updateProfile(user, {displayName: username});
+    const success = await signUpUser(username, email, password, profileInput);
+    setLoading(false);
 
-      // 3️⃣ Add user document to Firestore collection "users"
-
-      // inside handleSignUp
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        username,
-        email,
-        createdAt: serverTimestamp(),
-        emailVerified: user.emailVerified,
-      });
-
-      // 4️⃣ Send verification email
-      await sendEmailVerification(user);
-
-      // 5️⃣ Notify user
-      Swal.fire({
-        icon: "success",
-        title: "Account Created!",
-        text: "Verification email sent. Please check your inbox/spam folder.",
-        confirmButtonColor: "#3085d6",
-      });
-      toast.success("Signup successful! Please verify your email.");
-
-      // 6️⃣ Reset form
+    if (success) {
       setUsername("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-
-      // 7️⃣ Redirect to login
+      setProfileImg(null);
+      setProfileUrl("");
+      setPreviewImg(null);
       navigate("/login");
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Signup Failed",
-        text: error.message,
-        confirmButtonColor: "#d33",
-      });
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -114,6 +86,7 @@ const SignUp = () => {
           <center>
             <Title title="Admin Signup" />
           </center>
+
           <div className="container loginContainer">
             <div>
               <Player
@@ -126,6 +99,28 @@ const SignUp = () => {
 
             <div className="loginForm">
               <form onSubmit={handleSignUp}>
+                {/* Profile Image */}
+                <div className="form-outline mb-3 text-center">
+                  <label htmlFor="profileImg">
+                    <img
+                      src={previewImg || profileBlankImg}
+                      alt="preview"
+                      width="100"
+                      height="100"
+                      className="rounded-circle border mb-2"
+                      style={{cursor: "pointer", objectFit: "cover"}}
+                    />
+                  </label>
+                  <input
+                    id="profileImg"
+                    type="file"
+                    accept="image/*"
+                    style={{display: "none"}}
+                    onChange={handleImageChange}
+                  />
+                  <p className="small text-muted">Set Your Profile Picture</p>
+                </div>
+
                 {/* Username */}
                 <div className="form-outline mb-3">
                   <input
@@ -194,7 +189,7 @@ const SignUp = () => {
               </form>
 
               <p>
-                Already Have an Account? <Link to="/login">Login Here</Link>
+                Already have an account? <Link to="/login">Login Here</Link>
               </p>
             </div>
           </div>

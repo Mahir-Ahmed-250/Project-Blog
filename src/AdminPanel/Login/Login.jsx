@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import animationData from "../../Assets/Login.json";
 import useFirebase from "../../Hooks/useFirebase";
 import Button from "../../Components/Button/Button";
 import Title from "../../Components/Title/Title";
-import { Player } from "@lottiefiles/react-lottie-player";
+import {Player} from "@lottiefiles/react-lottie-player";
 import "./Login.css";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Login = () => {
-  const { loginUser, loading } = useFirebase();
+  const {loginUser, loading} = useFirebase();
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
   };
-  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +28,6 @@ const Login = () => {
     e.preventDefault();
     try {
       await loginUser(email, password);
-      navigate("/dashboard"); // ✅ redirect after successful login
     } catch (error) {
       console.error("Login failed:", error.message);
     }
@@ -47,7 +45,7 @@ const Login = () => {
               autoplay
               loop
               src={animationData}
-              style={{ width: "100%", height: "70vh" }}
+              style={{width: "100%", height: "70vh"}}
             />
           </div>
           <div className="loginForm">
