@@ -1,14 +1,14 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import animationData from "../../Assets/Login.json";
 import useFirebase from "../../Hooks/useFirebase";
 import Button from "../../Components/Button/Button";
 import Title from "../../Components/Title/Title";
-import {Player} from "@lottiefiles/react-lottie-player";
+import { Player } from "@lottiefiles/react-lottie-player";
 import "./Login.css";
-import {Link, useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Login = () => {
-  const {loginUser, loading} = useFirebase();
+  const { loginUser, loading } = useFirebase();
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
@@ -45,7 +45,7 @@ const Login = () => {
               autoplay
               loop
               src={animationData}
-              style={{width: "100%", height: "70vh"}}
+              style={{ width: "100%", height: "70vh" }}
             />
           </div>
           <div className="loginForm">
@@ -57,9 +57,6 @@ const Login = () => {
                   className="form-control form-control-lg mb-2 w-100"
                   onChange={handleEmail}
                   required
-                  style={{
-                    fontFamily: "Raleway",
-                  }}
                   placeholder="Admin Email"
                 />
               </div>
@@ -70,9 +67,6 @@ const Login = () => {
                   type={passwordShown ? "text" : "password"}
                   required
                   onChange={handlePassword}
-                  style={{
-                    fontFamily: "Raleway",
-                  }}
                   placeholder="Enter a password"
                 />
 

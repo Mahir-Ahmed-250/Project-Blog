@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -8,42 +8,48 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import {getFirestore, doc, setDoc, serverTimestamp} from "firebase/firestore";
+import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
 import initializeFirebase from "../Firebase/firebase.init";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // ✅ Initialize Firebase app and services
 const firebaseApp = initializeFirebase();
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 
-const IMGBB_API_KEY = "596a4581abe4c9848fe42dfc31df31bc"; // 🔹 replace with your ImgBB API key
+// 🔑 ImgBB API key (use .env in production!)
+const IMGBB_API_KEY = "596a4581abe4c9848fe42dfc31df31bc";
 
 const useFirebase = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // 🔹 Helper: upload file to ImgBB
+  // 🔹 Upload file to ImgBB
   const uploadToImgBB = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
 
-    const res = await fetch(
-      `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
-      {
-        method: "POST",
-        body: formData,
+      const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+      if (data.success) {
+        return data.data.url;
       }
-    );
-
-    const data = await res.json();
-    if (data.success) {
-      return data.data.url;
-    } else {
       throw new Error("ImgBB upload failed");
+    } catch (err) {
+      console.error("ImgBB Error:", err);
+      toast.error("Profile picture upload failed");
+      return null;
     }
   };
 
@@ -61,7 +67,6 @@ const useFirebase = () => {
       let photoURL = null;
 
       if (profileFileOrUrl) {
-        // Check if it's a File object (from <input type="file">)
         if (profileFileOrUrl instanceof File) {
           photoURL = await uploadToImgBB(profileFileOrUrl);
         } else if (typeof profileFileOrUrl === "string") {
@@ -69,10 +74,13 @@ const useFirebase = () => {
         }
       }
 
-      // ✅ Update profile with displayName & photoURL
-      await updateProfile(firebaseUser, {displayName: username, photoURL});
+      // ✅ Update Firebase profile
+      await updateProfile(firebaseUser, {
+        displayName: username,
+        photoURL,
+      });
 
-      // ✅ Save user to Firestore
+      // ✅ Save to Firestore
       await setDoc(doc(db, "users", firebaseUser.uid), {
         uid: firebaseUser.uid,
         username,
@@ -85,8 +93,9 @@ const useFirebase = () => {
       // ✅ Send verification email
       await sendEmailVerification(firebaseUser);
 
-      // ✅ Log out
+      // ✅ Force logout until verification
       await signOut(auth);
+      setUser(null);
 
       Swal.fire({
         icon: "success",
@@ -115,13 +124,15 @@ const useFirebase = () => {
       const res = await signInWithEmailAndPassword(auth, email, password);
 
       if (res.user.emailVerified) {
+        setUser(res.user);
         Swal.fire({
           icon: "success",
           title: "Congratulations",
-          text: "Welcome to Admin Panel",
+          text: "Welcome to Admin",
+          timer: 1500,
+          showConfirmButton: false,
         });
-        setUser(res.user);
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       } else {
         await signOut(auth);
         Swal.fire({
@@ -142,6 +153,7 @@ const useFirebase = () => {
     try {
       await signOut(auth);
       setUser(null);
+      navigate("/login", { replace: true });
     } catch (err) {
       toast.error(err.message);
     }
@@ -150,18 +162,18 @@ const useFirebase = () => {
   // 🔹 Auth state observer
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser && firebaseUser.emailVerified) {
+      if (firebaseUser?.emailVerified) {
         setUser(firebaseUser);
       } else {
         setUser(null);
       }
       setLoading(false);
     });
-    return unSubscribe;
+    return () => unSubscribe();
   }, []);
 
-  return {user, loading, signUpUser, loginUser, logOut, db};
+  return { user, loading, signUpUser, loginUser, logOut, db };
 };
 
-export {auth, db};
+export { auth, db };
 export default useFirebase;
