@@ -4,26 +4,24 @@ import useFirebase from "../Hooks/useFirebase";
 import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from "../Assets/Loading.json";
 
-const PrivateRoute = ({ children }) => {
-  const { user, loading } = useFirebase();
+const PrivateRoute = ({ children, allowedRoles = ["user", "admin"] }) => {
+  const { user, userData, loading } = useFirebase();
 
-  if (loading) {
+  if (loading || (user && !userData)) {
     return (
-      <div>
-        <br />
-        <Player
-          autoplay
-          loop
-          src={animationData}
-          style={{ width: "100%", height: "100vh" }}
-        />
-      </div>
+      <Player
+        autoplay
+        loop
+        src={animationData}
+        style={{ width: "100%", height: "100vh" }}
+      />
     );
   }
 
-  if (!user) {
-    // লগইন না থাকলে Login পেজে পাঠাবে
-    return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (!allowedRoles.includes(userData?.role)) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return children;

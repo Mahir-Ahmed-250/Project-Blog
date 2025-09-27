@@ -18,6 +18,8 @@ import useFirebase from "./Hooks/useFirebase";
 import NotFound from "./UserPanel/NotFound/NotFound";
 import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from './Assets/Loading.json';
+import UserDashboard from "./AdminPanel/UserDashboard/UserDashboard";
+import AdminDashboard from "./AdminPanel/AdminDashboard/AdminDashboard";
 
 function App() {
   const { user, loading } = useFirebase(); // ✅ make sure useFirebase returns loading
@@ -62,16 +64,24 @@ function App() {
             path="/signUp"
             element={user ? <Navigate to="/dashboard" replace /> : <SignUp />}
           />
-
-          {/* Private Route */}
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute>
-                THIS IS DASHBOARD
+              <PrivateRoute allowedRoles={["admin"]}>
+                <AdminDashboard />
               </PrivateRoute>
             }
           />
+
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute allowedRoles={["user", "admin"]}>
+                <UserDashboard />
+              </PrivateRoute>
+            }
+          />
+
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

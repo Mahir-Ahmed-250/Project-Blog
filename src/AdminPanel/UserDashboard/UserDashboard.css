@@ -1,0 +1,11 @@
+.userDashboardContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.userWarningText {
+    background-color: rgb(232, 101, 101);
+    padding: 30px;
+    color: white;
+}

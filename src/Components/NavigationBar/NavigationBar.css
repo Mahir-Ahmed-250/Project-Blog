@@ -16,6 +16,10 @@
     width: 60px;
 }
 
+.dropdown-item {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 760px) {
     .homeIcon {
         height: 60px;
