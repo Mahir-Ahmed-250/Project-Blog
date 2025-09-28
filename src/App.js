@@ -17,7 +17,7 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import useFirebase from "./Hooks/useFirebase";
 import NotFound from "./UserPanel/NotFound/NotFound";
 import { Player } from "@lottiefiles/react-lottie-player";
-import animationData from './Assets/Loading.json';
+import animationData from './Assets/Loading2.json';
 import UserDashboard from "./AdminPanel/UserDashboard/UserDashboard";
 import AdminDashboard from "./AdminPanel/AdminDashboard/AdminDashboard";
 import CreateAnAdmin from "./AdminPanel/CreateAnAdmin/CreateAnAdmin";
@@ -95,7 +95,7 @@ function App() {
           />
 
 
-          {/* 404 */}
+
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

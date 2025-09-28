@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -17,9 +17,9 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import initializeFirebase from "../Firebase/firebase.init";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const firebaseApp = initializeFirebase();
 const auth = getAuth(firebaseApp);
@@ -39,7 +39,7 @@ const useFirebase = () => {
       formData.append("image", file);
       const res = await fetch(
         `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
-        {method: "POST", body: formData}
+        { method: "POST", body: formData }
       );
       const data = await res.json();
       if (data.success) return data.data.url;
@@ -69,7 +69,7 @@ const useFirebase = () => {
         photoURL = profileFileOrUrl;
       }
 
-      await updateProfile(firebaseUser, {displayName: username, photoURL});
+      await updateProfile(firebaseUser, { displayName: username, photoURL });
 
       // Save with role = "user"
       await setDoc(doc(db, "users", firebaseUser.uid), {
@@ -122,11 +122,11 @@ const useFirebase = () => {
 
       const docRef = doc(db, "users", res.user.uid);
       const snap = await getDoc(docRef);
-      const data = snap.exists() ? snap.data() : {role: "user"};
+      const data = snap.exists() ? snap.data() : { role: "user" };
       setUserData(data);
 
       if (data.role) {
-        navigate("/dashboard", {replace: true});
+        navigate("/dashboard", { replace: true });
       }
 
       Swal.fire({
@@ -158,6 +158,22 @@ const useFirebase = () => {
       toast.error("Failed to send password reset email: " + err.message);
     }
   };
+  // 🔹 Auth observer
+  useEffect(() => {
+    const unSubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser?.emailVerified) {
+        setUser(firebaseUser);
+        const docRef = doc(db, "users", firebaseUser.uid);
+        const snap = await getDoc(docRef);
+        setUserData(snap.exists() ? snap.data() : { role: "user" });
+      } else {
+        setUser(null);
+        setUserData(null);
+      }
+      setLoading(false);
+    });
+    return () => unSubscribe();
+  }, []);
   // 🔹 Update user profile (name + photo)
   const updateUserProfile = async (uid, newName, profileFileOrUrl) => {
     setLoading(true);
@@ -186,13 +202,14 @@ const useFirebase = () => {
           username: newName || "",
           photoURL: photoURL || null,
         },
-        {merge: true}
+        { merge: true }
       );
 
       // Refresh local userData
-      setUserData((prev) => ({...prev, username: newName, photoURL}));
+      setUser((prev) => ({ ...prev, username: newName, photoURL }));
 
       toast.success("Profile updated successfully!");
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       console.error(err);
       toast.error("Failed to update profile: " + err.message);
@@ -207,28 +224,11 @@ const useFirebase = () => {
       await signOut(auth);
       setUser(null);
       setUserData(null);
-      navigate("/login", {replace: true});
+      navigate("/login", { replace: true });
     } catch (err) {
       toast.error(err.message);
     }
   };
-
-  // 🔹 Auth observer
-  useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser?.emailVerified) {
-        setUser(firebaseUser);
-        const docRef = doc(db, "users", firebaseUser.uid);
-        const snap = await getDoc(docRef);
-        setUserData(snap.exists() ? snap.data() : {role: "user"});
-      } else {
-        setUser(null);
-        setUserData(null);
-      }
-      setLoading(false);
-    });
-    return () => unSubscribe();
-  }, []);
 
   return {
     user,
@@ -238,9 +238,10 @@ const useFirebase = () => {
     loginUser,
     logOut,
     db,
+    resetPassword,
     updateUserProfile,
   };
 };
 
-export {auth, db};
+export { auth, db };
 export default useFirebase;

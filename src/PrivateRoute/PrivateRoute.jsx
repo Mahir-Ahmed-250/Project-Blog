@@ -1,11 +1,11 @@
 import React from "react";
-import {Navigate} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import useFirebase from "../Hooks/useFirebase";
-import {Player} from "@lottiefiles/react-lottie-player";
-import animationData from "../Assets/Loading.json";
+import { Player } from "@lottiefiles/react-lottie-player";
+import animationData from "../Assets/Loading2.json";
 
-const PrivateRoute = ({children, allowedRoles}) => {
-  const {user, userData, loading} = useFirebase();
+const PrivateRoute = ({ children, allowedRoles }) => {
+  const { user, userData, loading } = useFirebase();
 
   if (loading) {
     return (
@@ -14,7 +14,7 @@ const PrivateRoute = ({children, allowedRoles}) => {
           autoplay
           loop
           src={animationData}
-          style={{width: "50%", height: "30%"}}
+          style={{ width: "50%", height: "30%" }}
         />
       </center>
     );

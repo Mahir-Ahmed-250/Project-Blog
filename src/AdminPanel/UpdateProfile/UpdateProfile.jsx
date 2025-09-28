@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import {Player} from "@lottiefiles/react-lottie-player";
+import React, { useState, useEffect } from "react";
+import { Player } from "@lottiefiles/react-lottie-player";
 import Title from "../../Components/Title/Title";
 import Button from "../../Components/Button/Button";
 import profileBlankImg from "../../Assets/ProfileImg.png";
@@ -7,7 +7,7 @@ import useFirebase from "../../Hooks/useFirebase";
 import animationData from "../../Assets/Loading2.json";
 
 const UpdateProfile = () => {
-  const {user, userData, loading, updateUserProfile} = useFirebase();
+  const { user, userData, loading, updateUserProfile } = useFirebase();
   const [username, setUsername] = useState("");
   const [profileImg, setProfileImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
@@ -41,18 +41,17 @@ const UpdateProfile = () => {
           autoplay
           loop
           src={animationData}
-          style={{height: "80vh", width: "100%"}}
+          style={{ height: "80vh", width: "100%" }}
         />
       </div>
     );
   }
 
   return (
-    <div className="container loginContainer">
+    <div className="container">
       <center>
         <Title title="Update Profile" />
       </center>
-
       <div className="loginForm">
         <form onSubmit={handleUpdate}>
           <div className="form-outline mb-3 text-center">
@@ -63,14 +62,14 @@ const UpdateProfile = () => {
                 width="100"
                 height="100"
                 className="rounded-circle border mb-2"
-                style={{cursor: "pointer", objectFit: "cover"}}
+                style={{ cursor: "pointer", objectFit: "cover" }}
               />
             </label>
             <input
               id="profileImg"
               type="file"
               accept="image/*"
-              style={{display: "none"}}
+              style={{ display: "none" }}
               onChange={handleImageChange}
             />
             <p className="small text-muted">Click to change profile picture</p>
@@ -84,6 +83,13 @@ const UpdateProfile = () => {
               required
               className="form-control form-control-lg w-100"
               placeholder="Enter your name"
+            />
+            <br />
+            <input
+              type="text"
+              value={user.email}
+              className="form-control form-control-lg w-100"
+              disabled
             />
           </div>
 
