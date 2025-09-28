@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import animationData from "../../Assets/Login.json";
 import useFirebase from "../../Hooks/useFirebase";
 import Button from "../../Components/Button/Button";
 import Title from "../../Components/Title/Title";
-import { Player } from "@lottiefiles/react-lottie-player";
+import {Player} from "@lottiefiles/react-lottie-player";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const Login = () => {
-  const { loginUser, loading } = useFirebase();
+  const {loginUser, loading} = useFirebase();
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
@@ -45,7 +45,7 @@ const Login = () => {
               autoplay
               loop
               src={animationData}
-              style={{ width: "100%", height: "70vh" }}
+              style={{width: "100%", height: "70vh"}}
             />
           </div>
           <div className="loginForm">
@@ -78,6 +78,7 @@ const Login = () => {
                 />
                 <label className="form-check-label ms-4">Show Password</label>
               </div>
+
               {loading ? (
                 <Button
                   title="Processing"
@@ -96,6 +97,9 @@ const Login = () => {
                 />
               )}
             </form>
+            <p>
+              Forgot Password? <Link to="/forgot-password">Reset Here</Link>
+            </p>
             <p>
               Don't Have Admin Account?{" "}
               <Link to="/signUp">Create Now!</Link>{" "}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail, // ✅ Import for forgot password
 } from "firebase/auth";
 import {
   getFirestore,
@@ -16,9 +17,9 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import initializeFirebase from "../Firebase/firebase.init";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const firebaseApp = initializeFirebase();
 const auth = getAuth(firebaseApp);
@@ -38,7 +39,7 @@ const useFirebase = () => {
       formData.append("image", file);
       const res = await fetch(
         `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
-        { method: "POST", body: formData }
+        {method: "POST", body: formData}
       );
       const data = await res.json();
       if (data.success) return data.data.url;
@@ -68,7 +69,7 @@ const useFirebase = () => {
         photoURL = profileFileOrUrl;
       }
 
-      await updateProfile(firebaseUser, { displayName: username, photoURL });
+      await updateProfile(firebaseUser, {displayName: username, photoURL});
 
       // Save with role = "user"
       await setDoc(doc(db, "users", firebaseUser.uid), {
@@ -76,7 +77,7 @@ const useFirebase = () => {
         username,
         email,
         photoURL: photoURL || null,
-        role: "admin",
+        role: "user",
         createdAt: serverTimestamp(),
         emailVerified: firebaseUser.emailVerified,
       });
@@ -117,20 +118,15 @@ const useFirebase = () => {
         return;
       }
 
-      // ✅ Set Firebase user
       setUser(res.user);
 
-      // ✅ Fetch user data (role)
       const docRef = doc(db, "users", res.user.uid);
       const snap = await getDoc(docRef);
-      const data = snap.exists() ? snap.data() : { role: "user" };
+      const data = snap.exists() ? snap.data() : {role: "user"};
       setUserData(data);
 
-      // 🔹 Redirect based on role
-      if (data.role === "admin") {
-        navigate("/dashboard", { replace: true });
-      } else {
-        navigate("/profile", { replace: true }); // new users go here
+      if (data.role) {
+        navigate("/dashboard", {replace: true});
       }
 
       Swal.fire({
@@ -147,13 +143,71 @@ const useFirebase = () => {
     }
   };
 
+  // 🔹 Forgot Password
+  const resetPassword = async (email) => {
+    if (!email) return toast.error("Please enter your email!");
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Swal.fire({
+        icon: "success",
+        title: "Password Reset Email Sent",
+        text: `Check your inbox at ${email}`,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to send password reset email: " + err.message);
+    }
+  };
+  // 🔹 Update user profile (name + photo)
+  const updateUserProfile = async (uid, newName, profileFileOrUrl) => {
+    setLoading(true);
+    try {
+      let photoURL = null;
+
+      if (profileFileOrUrl instanceof File) {
+        photoURL = await uploadToImgBB(profileFileOrUrl);
+      } else if (typeof profileFileOrUrl === "string") {
+        photoURL = profileFileOrUrl;
+      }
+
+      // Update Firebase Auth profile
+      if (auth.currentUser && auth.currentUser.uid === uid) {
+        await updateProfile(auth.currentUser, {
+          displayName: newName || auth.currentUser.displayName,
+          photoURL: photoURL || auth.currentUser.photoURL,
+        });
+      }
+
+      // Update Firestore user document
+      const docRef = doc(db, "users", uid);
+      await setDoc(
+        docRef,
+        {
+          username: newName || "",
+          photoURL: photoURL || null,
+        },
+        {merge: true}
+      );
+
+      // Refresh local userData
+      setUserData((prev) => ({...prev, username: newName, photoURL}));
+
+      toast.success("Profile updated successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update profile: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // 🔹 Logout
   const logOut = async () => {
     try {
       await signOut(auth);
       setUser(null);
       setUserData(null);
-      navigate("/login", { replace: true });
+      navigate("/login", {replace: true});
     } catch (err) {
       toast.error(err.message);
     }
@@ -166,7 +220,7 @@ const useFirebase = () => {
         setUser(firebaseUser);
         const docRef = doc(db, "users", firebaseUser.uid);
         const snap = await getDoc(docRef);
-        setUserData(snap.exists() ? snap.data() : { role: "user" });
+        setUserData(snap.exists() ? snap.data() : {role: "user"});
       } else {
         setUser(null);
         setUserData(null);
@@ -176,8 +230,17 @@ const useFirebase = () => {
     return () => unSubscribe();
   }, []);
 
-  return { user, userData, loading, signUpUser, loginUser, logOut, db };
+  return {
+    user,
+    userData,
+    loading,
+    signUpUser,
+    loginUser,
+    logOut,
+    db,
+    updateUserProfile,
+  };
 };
 
-export { auth, db };
+export {auth, db};
 export default useFirebase;

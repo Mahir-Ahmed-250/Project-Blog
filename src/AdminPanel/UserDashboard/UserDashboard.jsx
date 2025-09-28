@@ -1,4 +1,4 @@
-import { Player } from "@lottiefiles/react-lottie-player";
+import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../Assets/Welcome.json";
 import "./UserDashboard.css";
 
@@ -12,13 +12,12 @@ const UserDashboard = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-          }}
-        >
+          }}>
           <Player
             autoplay
             loop
             src={animationData}
-            style={{ height: "70vh", width: "100%" }}
+            style={{height: "70vh", width: "100%"}}
           />
 
           <div>

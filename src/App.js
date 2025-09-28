@@ -20,9 +20,12 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from './Assets/Loading.json';
 import UserDashboard from "./AdminPanel/UserDashboard/UserDashboard";
 import AdminDashboard from "./AdminPanel/AdminDashboard/AdminDashboard";
+import CreateAnAdmin from "./AdminPanel/CreateAnAdmin/CreateAnAdmin";
+import ForgotPassword from "./AdminPanel/ForgetPassword/ForgetPassword";
+import UpdateProfile from "./AdminPanel/UpdateProfile/UpdateProfile";
 
 function App() {
-  const { user, loading } = useFirebase(); // ✅ make sure useFirebase returns loading
+  const { user, loading, userData } = useFirebase(); // ✅ make sure useFirebase returns loading
 
   if (loading) {
     // ✅ While Firebase checks if user is logged in, show loader instead of login
@@ -63,21 +66,30 @@ function App() {
           <Route
             path="/signUp"
             element={user ? <Navigate to="/dashboard" replace /> : <SignUp />}
+
+          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/updateProfile"
+            element={
+              <PrivateRoute allowedRoles={["super-admin", "admin", "user"]}>
+                <UpdateProfile />
+              </PrivateRoute>
+            }
           />
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute allowedRoles={["admin"]}>
-                <AdminDashboard />
+              <PrivateRoute allowedRoles={["user", "admin", "super-admin"]}>
+                {userData?.role === "user" ? <UserDashboard /> : <AdminDashboard />}
               </PrivateRoute>
             }
           />
-
           <Route
-            path="/profile"
+            path="/createAnAdmin"
             element={
-              <PrivateRoute allowedRoles={["user", "admin"]}>
-                <UserDashboard />
+              <PrivateRoute allowedRoles={["super-admin"]}>
+                <CreateAnAdmin />
               </PrivateRoute>
             }
           />
