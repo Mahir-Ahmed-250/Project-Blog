@@ -62,7 +62,11 @@ const AdminDashboard = () => {
                   </Link>
                 </div>
                 <div className="col-md-6">
-                  <div className="adminDashboardCard">Everyday Lifestyle</div>
+                  <Link
+                    to="/adminEverydayLifeStyle"
+                    style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard">Everyday Lifestyle</div>
+                  </Link>
                 </div>
                 <div className="col-md-6">
                   <div className="adminDashboardCard">Health and Wellness</div>

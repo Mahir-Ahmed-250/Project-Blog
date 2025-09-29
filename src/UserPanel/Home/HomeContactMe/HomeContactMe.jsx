@@ -3,7 +3,6 @@ import "./HomeContactMe.css";
 import Title from "../../../Components/Title/Title";
 import emailjs from "emailjs-com";
 import {toast} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const HomeContactMe = () => {
   const [formData, setFormData] = useState({
