@@ -69,15 +69,27 @@ const AdminDashboard = () => {
                   </Link>
                 </div>
                 <div className="col-md-6">
-                  <div className="adminDashboardCard">Health and Wellness</div>
+                  <Link
+                    to="/adminHealthAndWellness"
+                    style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard">
+                      Health And Wellness
+                    </div>
+                  </Link>
                 </div>
                 <div className="col-md-6">
-                  <div className="adminDashboardCard">
-                    Event and Successful People
-                  </div>
+                  <Link
+                    to="/adminEventAndSuccessfulPeople"
+                    style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard">
+                      Event and Successful People
+                    </div>
+                  </Link>
                 </div>
                 <div className="col-md-12">
-                  <div className="adminDashboardCard text-center">Shop</div>
+                  <Link to="/adminShop" style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard text-center">Shop</div>
+                  </Link>
                 </div>
               </>
             )}
@@ -109,7 +121,9 @@ const AdminDashboard = () => {
                   </Link>
                 </div>
                 <div className="col-md-6">
-                  <div className="adminDashboardCard ">Shop</div>
+                  <Link to="/adminShop" style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard">Shop</div>
+                  </Link>
                 </div>
               </>
             )}

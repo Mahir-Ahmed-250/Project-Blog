@@ -28,6 +28,7 @@ import AdminEverydayLifeStyle from "./AdminPanel/AdminBlogs/AdminEverydayLifeSty
 import AdminHealthAndWellness from "./AdminPanel/AdminBlogs/AdminHealthAndWellness/AdminHealthAndWellness";
 import AdminEventAndSuccessfulPeople from "./AdminPanel/AdminBlogs/AdminEventAndSuccessfulPeople/AdminEventAndSuccessfulPeople";
 import HealthAndWellness from "./UserPanel/Blog/HealthAndWellness/HealthAndWellness/HealthAndWellness";
+import AdminShop from "./AdminPanel/AdminShop/AdminShop";
 
 
 
@@ -116,7 +117,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* Admin Everyday Lifestyle Editor */}
+        {/* Admin Health And Wellness Editor */}
         <Route
           path="/adminHealthAndWellness"
           element={
@@ -125,12 +126,21 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* Admin Everyday Lifestyle Editor */}
+        {/* Admin Event And Successful People Editor */}
         <Route
           path="/adminEventAndSuccessfulPeople"
           element={
             <PrivateRoute allowedRoles={["super-admin", "admin"]}>
               <AdminEventAndSuccessfulPeople />
+            </PrivateRoute>
+          }
+        />
+        {/* Admin Shop Editor */}
+        <Route
+          path="/adminShop"
+          element={
+            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
+              <AdminShop />
             </PrivateRoute>
           }
         />

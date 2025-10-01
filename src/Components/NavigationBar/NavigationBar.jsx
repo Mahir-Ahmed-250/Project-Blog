@@ -18,7 +18,6 @@ const NavigationBar = () => {
   const handleClose = () => setShowOffcanvas(false);
   const handleShow = () => setShowOffcanvas(true);
   const {user, logOut} = useFirebase();
-  console.log(user);
 
   return (
     <>

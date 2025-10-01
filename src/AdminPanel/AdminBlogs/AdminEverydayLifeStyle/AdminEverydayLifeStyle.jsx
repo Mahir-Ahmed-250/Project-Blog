@@ -20,6 +20,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Swal from "sweetalert2";
 import animationData from "../../../Assets/Loading2.json";
 import {Player} from "@lottiefiles/react-lottie-player";
+import Title from "../../../Components/Title/Title";
 
 // Helper: safely create EditorState from HTML
 const createEditorStateFromHTML = (html) => {
@@ -257,7 +258,8 @@ const AdminEverydayLifeStyle = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Manage Everyday Lifestyle Blogs</h2>
+      <Title title="Manage Everyday Lifestyle Blogs" />
+
       <hr />
       <div className="row mt-3">
         {blogs.map((blog) => (

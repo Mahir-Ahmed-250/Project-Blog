@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import animationData from "../../../Assets/Loading2.json";
 import {Player} from "@lottiefiles/react-lottie-player";
 import {db} from "../../../Hooks/useFirebase";
+import Title from "../../../Components/Title/Title";
 
 // Helper: safely create EditorState from HTML
 const createEditorStateFromHTML = (html) => {
@@ -261,7 +262,8 @@ const AdminEventAndSuccessfulPeople = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Manage Event And Successful People Blogs</h2>
+      <Title title="Manage Event And Successful People Blogs" />
+
       <hr />
 
       <div className="row mt-3">
