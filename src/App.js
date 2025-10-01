@@ -25,6 +25,9 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from "./Assets/Loading2.json";
 import EverydayLifestyle from "./UserPanel/Blog/EverydayLifestyle/EverydayLifestyle/EverydayLifestyle";
 import AdminEverydayLifeStyle from "./AdminPanel/AdminBlogs/AdminEverydayLifeStyle/AdminEverydayLifeStyle";
+import AdminHealthAndWellness from "./AdminPanel/AdminBlogs/AdminHealthAndWellness/AdminHealthAndWellness";
+import AdminEventAndSuccessfulPeople from "./AdminPanel/AdminBlogs/AdminEventAndSuccessfulPeople/AdminEventAndSuccessfulPeople";
+import HealthAndWellness from "./UserPanel/Blog/HealthAndWellness/HealthAndWellness/HealthAndWellness";
 
 
 
@@ -57,10 +60,12 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/blog/everydayLifestyle" element={<EverydayLifestyles />} />
-        <Route path="/blog/everyday-lifestyle/:id" element={<EverydayLifestyle />} />
         <Route path="/blog/healthAndWellness" element={<HealthAndWellnessS />} />
         <Route path="/blog/eventAndSuccessfulPeople" element={<EventAndSuccessfulPeoples />} />
-        <Route path="/blog/everyday-lifestyle/:slug" element={<EventAndSuccessfulPeople />} />
+        <Route path="/blog/everyday-lifestyle/:id" element={<EverydayLifestyle />} />
+        <Route path="/blog/health-and-wellness/:id" element={<HealthAndWellness />} />
+        <Route path="/blog/event-and-successful-people/:id" element={<EventAndSuccessfulPeople />} />
+
         <Route path="/contact" element={<ContactMe />} />
         <Route path="/about" element={<AboutMe />} />
         <Route path="/shops" element={<Shops />} />
@@ -106,12 +111,29 @@ function App() {
         <Route
           path="/adminEverydayLifeStyle"
           element={
-            <PrivateRoute allowedRoles={["super-admin"]}>
+            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
               <AdminEverydayLifeStyle />
             </PrivateRoute>
           }
         />
-
+        {/* Admin Everyday Lifestyle Editor */}
+        <Route
+          path="/adminHealthAndWellness"
+          element={
+            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
+              <AdminHealthAndWellness />
+            </PrivateRoute>
+          }
+        />
+        {/* Admin Everyday Lifestyle Editor */}
+        <Route
+          path="/adminEventAndSuccessfulPeople"
+          element={
+            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
+              <AdminEventAndSuccessfulPeople />
+            </PrivateRoute>
+          }
+        />
         {/* Not Found */}
         <Route path="*" element={<NotFound />} />
       </Routes>

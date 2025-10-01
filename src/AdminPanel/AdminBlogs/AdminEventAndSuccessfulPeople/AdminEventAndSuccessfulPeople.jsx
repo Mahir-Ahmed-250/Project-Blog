@@ -10,16 +10,18 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import {db} from "../../../Hooks/useFirebase";
+
 import {Button, Card, Modal, Form} from "react-bootstrap";
 import {Editor} from "react-draft-wysiwyg";
 import {EditorState, convertToRaw, ContentState} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import Swal from "sweetalert2";
 import animationData from "../../../Assets/Loading2.json";
 import {Player} from "@lottiefiles/react-lottie-player";
+import {db} from "../../../Hooks/useFirebase";
 
 // Helper: safely create EditorState from HTML
 const createEditorStateFromHTML = (html) => {
@@ -34,26 +36,26 @@ const createEditorStateFromHTML = (html) => {
   return EditorState.createWithContent(contentState);
 };
 
-const AdminEverydayLifeStyle = () => {
+const AdminEventAndSuccessfulPeople = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Create
-  const [newTitle, setNewTitle] = useState("");
-  const [newSerial, setNewSerial] = useState(1);
-  const [newCoverImage, setNewCoverImage] = useState(null);
+  // Create blog
   const [newEditorState, setNewEditorState] = useState(
     EditorState.createEmpty()
   );
+  const [newTitle, setNewTitle] = useState("");
+  const [newCoverImage, setNewCoverImage] = useState(null);
+  const [newSerial, setNewSerial] = useState(1);
   const [saving, setSaving] = useState(false);
 
-  // Update
+  // Update blog
   const [modalOpen, setModalOpen] = useState(false);
   const [currentBlog, setCurrentBlog] = useState(null);
-  const [blogTitle, setBlogTitle] = useState("");
-  const [serial, setSerial] = useState(1);
-  const [coverImage, setCoverImage] = useState(null);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [blogTitle, setBlogTitle] = useState("");
+  const [coverImage, setCoverImage] = useState(null);
+  const [serial, setSerial] = useState(1);
   const [updating, setUpdating] = useState(false);
 
   // Fetch blogs
@@ -61,7 +63,7 @@ const AdminEverydayLifeStyle = () => {
     setLoading(true);
     try {
       const q = query(
-        collection(db, "everydaylifestyle"),
+        collection(db, "eventandsuccessfulpeople"),
         orderBy("serial", "asc")
       );
       const snapshot = await getDocs(q);
@@ -95,7 +97,7 @@ const AdminEverydayLifeStyle = () => {
     reader.readAsDataURL(file);
   };
 
-  // Create blog
+  // Create new blog
   const handleCreate = async () => {
     if (!newTitle) return Swal.fire("Error", "Title is required", "warning");
     if (!newSerial || newSerial < 1)
@@ -107,11 +109,11 @@ const AdminEverydayLifeStyle = () => {
     );
 
     try {
-      const docRef = await addDoc(collection(db, "everydaylifestyle"), {
+      const docRef = await addDoc(collection(db, "eventandsuccessfulpeople"), {
         title: newTitle,
-        serial: newSerial,
         coverImage: newCoverImage || "",
         content: htmlContent,
+        serial: newSerial,
         createdAt: serverTimestamp(),
       });
 
@@ -121,22 +123,21 @@ const AdminEverydayLifeStyle = () => {
         {
           id: docRef.id,
           title: newTitle,
-          serial: newSerial,
           coverImage: newCoverImage,
           content: htmlContent,
+          serial: newSerial,
         },
         ...blogs,
-      ];
-      updatedBlogs.sort((a, b) => a.serial - b.serial);
-      setBlogs(updatedBlogs);
+      ].sort((a, b) => a.serial - b.serial);
 
+      setBlogs(updatedBlogs);
       setNewTitle("");
-      setNewSerial(updatedBlogs.length + 1);
       setNewCoverImage(null);
       setNewEditorState(EditorState.createEmpty());
+      setNewSerial(updatedBlogs.length + 1);
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "Failed to create blog", "error");
+      Swal.fire("Error", "Failed to save blog", "error");
     } finally {
       setSaving(false);
     }
@@ -146,8 +147,8 @@ const AdminEverydayLifeStyle = () => {
   const handleEdit = (blog) => {
     setCurrentBlog(blog);
     setBlogTitle(blog.title);
-    setSerial(blog.serial || 1);
     setCoverImage(blog.coverImage || "");
+    setSerial(blog.serial || 1);
     setEditorState(createEditorStateFromHTML(blog.content));
     setModalOpen(true);
   };
@@ -164,21 +165,23 @@ const AdminEverydayLifeStyle = () => {
     );
 
     try {
-      await updateDoc(doc(db, "everydaylifestyle", currentBlog.id), {
+      await updateDoc(doc(db, "eventandsuccessfulpeople", currentBlog.id), {
         title: blogTitle,
-        serial,
         coverImage: coverImage || "",
         content: htmlContent,
+        serial,
       });
 
       Swal.fire("Success", "Blog updated successfully", "success");
 
-      const updatedBlogs = blogs.map((b) =>
-        b.id === currentBlog.id
-          ? {...b, title: blogTitle, serial, coverImage, content: htmlContent}
-          : b
-      );
-      updatedBlogs.sort((a, b) => a.serial - b.serial);
+      const updatedBlogs = blogs
+        .map((b) =>
+          b.id === currentBlog.id
+            ? {...b, title: blogTitle, coverImage, content: htmlContent, serial}
+            : b
+        )
+        .sort((a, b) => a.serial - b.serial);
+
       setBlogs(updatedBlogs);
       setModalOpen(false);
     } catch (err) {
@@ -201,14 +204,15 @@ const AdminEverydayLifeStyle = () => {
       confirmButtonText: "Yes, delete it!",
     });
 
-    if (!result.isConfirmed) return;
-    try {
-      await deleteDoc(doc(db, "everydaylifestyle", id));
-      Swal.fire("Deleted!", "Blog has been deleted.", "success");
-      setBlogs(blogs.filter((b) => b.id !== id));
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "Failed to delete blog", "error");
+    if (result.isConfirmed) {
+      try {
+        await deleteDoc(doc(db, "eventandsuccessfulpeople", id));
+        Swal.fire("Deleted!", "Blog has been deleted.", "success");
+        setBlogs(blogs.filter((b) => b.id !== id));
+      } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "Failed to delete blog", "error");
+      }
     }
   };
 
@@ -257,8 +261,9 @@ const AdminEverydayLifeStyle = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Manage Everyday Lifestyle Blogs</h2>
+      <h2>Manage Event And Successful People Blogs</h2>
       <hr />
+
       <div className="row mt-3">
         {blogs.map((blog) => (
           <div key={blog.id} className="col-md-4 mb-4">
@@ -286,8 +291,8 @@ const AdminEverydayLifeStyle = () => {
                 <Button
                   variant="primary"
                   size="sm"
-                  className="me-2"
-                  onClick={() => handleEdit(blog)}>
+                  onClick={() => handleEdit(blog)}
+                  className="me-2">
                   Edit
                 </Button>
                 <Button
@@ -433,4 +438,4 @@ const AdminEverydayLifeStyle = () => {
   );
 };
 
-export default AdminEverydayLifeStyle;
+export default AdminEventAndSuccessfulPeople;

@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {useParams, Link} from "react-router-dom";
 import {doc, getDoc} from "firebase/firestore";
+import {Link, useParams} from "react-router-dom";
 import {db} from "../../../../Hooks/useFirebase";
 import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../../../Assets/Loading2.json";
 import BlogContent from "../../BlogContent";
 import {Button} from "react-bootstrap";
 
-const EventAndSuccessfulPeopleSingle = () => {
-  const {id} = useParams(); // blog id from URL
+const HealthAndWellness = () => {
+  const {id} = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const docRef = doc(db, "eventandsuccessfulpeople", id);
+        const docRef = doc(db, "healthandwellness", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setBlog(docSnap.data());
@@ -41,19 +41,17 @@ const EventAndSuccessfulPeopleSingle = () => {
     );
   }
 
-  if (!blog) return <p className="text-center mt-5">Blog not found.</p>;
+  if (!blog) return <p>Blog not found.</p>;
 
   return (
     <div className="container mt-5">
       <h1>{blog.title}</h1>
       <p>Serial: {blog.serial}</p>
-
       {blog.coverImage && (
         <img
           src={blog.coverImage}
           alt={blog.title}
           style={{width: "100%", maxHeight: "400px", objectFit: "cover"}}
-          className="mb-3"
         />
       )}
 
@@ -61,13 +59,13 @@ const EventAndSuccessfulPeopleSingle = () => {
 
       <Button
         as={Link}
-        to="/blog/eventAndSuccessfulPeople"
+        to="/blog/healthandwellness"
         variant="dark"
-        className="mb-4 mt-3">
+        className="mb-4">
         ← Back to Blogs
       </Button>
     </div>
   );
 };
 
-export default EventAndSuccessfulPeopleSingle;
+export default HealthAndWellness;

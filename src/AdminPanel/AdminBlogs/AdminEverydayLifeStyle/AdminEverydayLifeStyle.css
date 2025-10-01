@@ -32,3 +32,14 @@
     border: 1px solid #000;
     border-radius: 5px;
 }
+
+.blog-content iframe {
+    width: 100%;
+    min-height: 350px;
+    border: none;
+    border-radius: 8px;
+}
+
+.blog-content iframe[allowfullscreen] {
+    aspect-ratio: 16 / 9;
+}

@@ -1,4 +1,3 @@
-// EverydayLifestyleSingle.jsx
 import React, {useEffect, useState} from "react";
 import {useParams, Link} from "react-router-dom";
 import {collection, doc, getDoc} from "firebase/firestore";
@@ -6,8 +5,10 @@ import {Container, Button} from "react-bootstrap";
 import {db} from "../../../../Hooks/useFirebase";
 import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../../../Assets/Loading2.json";
+import BlogContent from "../../BlogContent";
+
 const EverydayLifestyle = () => {
-  const {id} = useParams(); // Get blog ID from route
+  const {id} = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +34,7 @@ const EverydayLifestyle = () => {
 
   if (loading) {
     return (
-      <div className=" mt-5">
+      <div className="mt-5">
         <Player
           autoplay
           loop
@@ -51,6 +52,7 @@ const EverydayLifestyle = () => {
   return (
     <Container className="mt-5">
       <h1>{blog.title}</h1>
+
       {blog.coverImage && (
         <img
           src={blog.coverImage}
@@ -70,11 +72,9 @@ const EverydayLifestyle = () => {
           : "Unknown date"}
       </p>
 
-      <div
-        className="blog-content"
-        dangerouslySetInnerHTML={{__html: blog.content}}
-        style={{lineHeight: "1.6", fontSize: "16px"}}
-      />
+      {/* Use BlogContent component */}
+      <BlogContent content={blog.content} />
+
       <Button
         as={Link}
         to="/blog/everydayLifestyle"

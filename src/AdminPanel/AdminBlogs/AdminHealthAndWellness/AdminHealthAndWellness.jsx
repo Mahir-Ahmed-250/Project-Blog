@@ -10,18 +10,20 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import {db} from "../../../Hooks/useFirebase";
+
 import {Button, Card, Modal, Form} from "react-bootstrap";
 import {Editor} from "react-draft-wysiwyg";
 import {EditorState, convertToRaw, ContentState} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import Swal from "sweetalert2";
 import animationData from "../../../Assets/Loading2.json";
 import {Player} from "@lottiefiles/react-lottie-player";
+import {db} from "../../../Hooks/useFirebase";
 
-// Helper: safely create EditorState from HTML
+// Helper to safely create EditorState from HTML
 const createEditorStateFromHTML = (html) => {
   if (!html) return EditorState.createEmpty();
   const blocksFromHtml = htmlToDraft(html);
@@ -34,26 +36,26 @@ const createEditorStateFromHTML = (html) => {
   return EditorState.createWithContent(contentState);
 };
 
-const AdminEverydayLifeStyle = () => {
+const AdminHealthAndWellness = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Create
-  const [newTitle, setNewTitle] = useState("");
-  const [newSerial, setNewSerial] = useState(1);
-  const [newCoverImage, setNewCoverImage] = useState(null);
   const [newEditorState, setNewEditorState] = useState(
     EditorState.createEmpty()
   );
+  const [newTitle, setNewTitle] = useState("");
+  const [newCoverImage, setNewCoverImage] = useState(null);
+  const [newSerial, setNewSerial] = useState(1);
   const [saving, setSaving] = useState(false);
 
   // Update
   const [modalOpen, setModalOpen] = useState(false);
   const [currentBlog, setCurrentBlog] = useState(null);
-  const [blogTitle, setBlogTitle] = useState("");
-  const [serial, setSerial] = useState(1);
-  const [coverImage, setCoverImage] = useState(null);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [blogTitle, setBlogTitle] = useState("");
+  const [coverImage, setCoverImage] = useState(null);
+  const [serial, setSerial] = useState(1);
   const [updating, setUpdating] = useState(false);
 
   // Fetch blogs
@@ -61,7 +63,7 @@ const AdminEverydayLifeStyle = () => {
     setLoading(true);
     try {
       const q = query(
-        collection(db, "everydaylifestyle"),
+        collection(db, "healthandwellness"),
         orderBy("serial", "asc")
       );
       const snapshot = await getDocs(q);
@@ -99,7 +101,7 @@ const AdminEverydayLifeStyle = () => {
   const handleCreate = async () => {
     if (!newTitle) return Swal.fire("Error", "Title is required", "warning");
     if (!newSerial || newSerial < 1)
-      return Swal.fire("Error", "Serial must be positive", "warning");
+      return Swal.fire("Error", "Serial must be a positive number", "warning");
 
     setSaving(true);
     const htmlContent = draftToHtml(
@@ -107,11 +109,11 @@ const AdminEverydayLifeStyle = () => {
     );
 
     try {
-      const docRef = await addDoc(collection(db, "everydaylifestyle"), {
+      const docRef = await addDoc(collection(db, "healthandwellness"), {
         title: newTitle,
-        serial: newSerial,
         coverImage: newCoverImage || "",
         content: htmlContent,
+        serial: newSerial,
         createdAt: serverTimestamp(),
       });
 
@@ -121,9 +123,9 @@ const AdminEverydayLifeStyle = () => {
         {
           id: docRef.id,
           title: newTitle,
-          serial: newSerial,
           coverImage: newCoverImage,
           content: htmlContent,
+          serial: newSerial,
         },
         ...blogs,
       ];
@@ -131,12 +133,12 @@ const AdminEverydayLifeStyle = () => {
       setBlogs(updatedBlogs);
 
       setNewTitle("");
-      setNewSerial(updatedBlogs.length + 1);
       setNewCoverImage(null);
       setNewEditorState(EditorState.createEmpty());
+      setNewSerial(updatedBlogs.length + 1);
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "Failed to create blog", "error");
+      Swal.fire("Error", "Failed to save blog", "error");
     } finally {
       setSaving(false);
     }
@@ -146,9 +148,12 @@ const AdminEverydayLifeStyle = () => {
   const handleEdit = (blog) => {
     setCurrentBlog(blog);
     setBlogTitle(blog.title);
-    setSerial(blog.serial || 1);
     setCoverImage(blog.coverImage || "");
-    setEditorState(createEditorStateFromHTML(blog.content));
+    setSerial(blog.serial || 1);
+
+    const state = createEditorStateFromHTML(blog.content);
+    setEditorState(state);
+
     setModalOpen(true);
   };
 
@@ -156,30 +161,30 @@ const AdminEverydayLifeStyle = () => {
   const handleUpdate = async () => {
     if (!blogTitle) return Swal.fire("Error", "Title is required", "warning");
     if (!serial || serial < 1)
-      return Swal.fire("Error", "Serial must be positive", "warning");
+      return Swal.fire("Error", "Serial must be a positive number", "warning");
 
     setUpdating(true);
     const htmlContent = draftToHtml(
       convertToRaw(editorState.getCurrentContent())
     );
-
     try {
-      await updateDoc(doc(db, "everydaylifestyle", currentBlog.id), {
+      await updateDoc(doc(db, "healthandwellness", currentBlog.id), {
         title: blogTitle,
-        serial,
         coverImage: coverImage || "",
         content: htmlContent,
+        serial: serial,
       });
 
       Swal.fire("Success", "Blog updated successfully", "success");
 
       const updatedBlogs = blogs.map((b) =>
         b.id === currentBlog.id
-          ? {...b, title: blogTitle, serial, coverImage, content: htmlContent}
+          ? {...b, title: blogTitle, coverImage, content: htmlContent, serial}
           : b
       );
       updatedBlogs.sort((a, b) => a.serial - b.serial);
       setBlogs(updatedBlogs);
+
       setModalOpen(false);
     } catch (err) {
       console.error(err);
@@ -201,14 +206,15 @@ const AdminEverydayLifeStyle = () => {
       confirmButtonText: "Yes, delete it!",
     });
 
-    if (!result.isConfirmed) return;
-    try {
-      await deleteDoc(doc(db, "everydaylifestyle", id));
-      Swal.fire("Deleted!", "Blog has been deleted.", "success");
-      setBlogs(blogs.filter((b) => b.id !== id));
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "Failed to delete blog", "error");
+    if (result.isConfirmed) {
+      try {
+        await deleteDoc(doc(db, "healthandwellness", id));
+        Swal.fire("Deleted!", "Blog has been deleted.", "success");
+        setBlogs(blogs.filter((b) => b.id !== id));
+      } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "Failed to delete blog", "error");
+      }
     }
   };
 
@@ -222,42 +228,9 @@ const AdminEverydayLifeStyle = () => {
       />
     );
 
-  const editorToolbar = {
-    options: [
-      "inline",
-      "blockType",
-      "fontSize",
-      "fontFamily",
-      "list",
-      "textAlign",
-      "colorPicker",
-      "link",
-      "emoji",
-      "image",
-      "embedded",
-      "history",
-    ],
-    image: {
-      uploadEnabled: true,
-      previewImage: true,
-      inputAccept: "image/*",
-      uploadCallback: (file) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve({data: {link: e.target.result}});
-          reader.onerror = (err) => reject(err);
-          reader.readAsDataURL(file);
-        }),
-    },
-    embedded: {
-      embedCallback: (link) => link,
-      defaultSize: {height: "400px", width: "100%"},
-    },
-  };
-
   return (
     <div className="container mt-4">
-      <h2>Manage Everyday Lifestyle Blogs</h2>
+      <h2>Manage Health And Wellness Blogs</h2>
       <hr />
       <div className="row mt-3">
         {blogs.map((blog) => (
@@ -286,8 +259,8 @@ const AdminEverydayLifeStyle = () => {
                 <Button
                   variant="primary"
                   size="sm"
-                  className="me-2"
-                  onClick={() => handleEdit(blog)}>
+                  onClick={() => handleEdit(blog)}
+                  className="me-2">
                   Edit
                 </Button>
                 <Button
@@ -353,7 +326,35 @@ const AdminEverydayLifeStyle = () => {
           borderRadius: "8px",
           backgroundColor: "#fff",
         }}
-        toolbar={editorToolbar}
+        toolbar={{
+          options: [
+            "inline",
+            "blockType",
+            "fontSize",
+            "fontFamily",
+            "list",
+            "textAlign",
+            "colorPicker",
+            "link",
+            "emoji",
+            "image",
+            "embedded",
+            "history",
+          ],
+          embedded: {defaultSize: {height: "400px", width: "100%"}},
+          image: {
+            uploadEnabled: true,
+            previewImage: true,
+            inputAccept: "image/*",
+            uploadCallback: (file) =>
+              new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve({data: {link: e.target.result}});
+                reader.onerror = (err) => reject(err);
+                reader.readAsDataURL(file);
+              }),
+          },
+        }}
       />
 
       <Button
@@ -417,7 +418,36 @@ const AdminEverydayLifeStyle = () => {
               borderRadius: "8px",
               backgroundColor: "#fff",
             }}
-            toolbar={editorToolbar}
+            toolbar={{
+              options: [
+                "inline",
+                "blockType",
+                "fontSize",
+                "fontFamily",
+                "list",
+                "textAlign",
+                "colorPicker",
+                "link",
+                "emoji",
+                "image",
+                "embedded",
+                "history",
+              ],
+              embedded: {defaultSize: {height: "400px", width: "100%"}},
+              image: {
+                uploadEnabled: true,
+                previewImage: true,
+                inputAccept: "image/*",
+                uploadCallback: (file) =>
+                  new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) =>
+                      resolve({data: {link: e.target.result}});
+                    reader.onerror = (err) => reject(err);
+                    reader.readAsDataURL(file);
+                  }),
+              },
+            }}
           />
         </Modal.Body>
         <Modal.Footer>
@@ -433,4 +463,4 @@ const AdminEverydayLifeStyle = () => {
   );
 };
 
-export default AdminEverydayLifeStyle;
+export default AdminHealthAndWellness;

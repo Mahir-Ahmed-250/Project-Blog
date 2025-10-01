@@ -16,7 +16,7 @@ const EverydayLifestyles = () => {
       try {
         const q = query(
           collection(db, "everydaylifestyle"),
-          orderBy("createdAt", "desc")
+          orderBy("serial", "asc") // ✅ sort by serial for proper order
         );
         const snapshot = await getDocs(q);
         const blogs = snapshot.docs.map((doc) => ({
@@ -36,7 +36,7 @@ const EverydayLifestyles = () => {
 
   if (loading) {
     return (
-      <div className=" mt-5">
+      <div className="mt-5">
         <Player
           autoplay
           loop
@@ -96,7 +96,7 @@ const EverydayLifestyles = () => {
                     <Link
                       to={`/blog/everyday-lifestyle/${post.id}`}
                       style={{textDecoration: "none", color: "#333"}}>
-                      {post.title}
+                      {post.title} {/* ✅ no blog number shown */}
                     </Link>
                   </Card.Title>
                   <Card.Text style={{fontSize: "14px", color: "#666"}}>

@@ -84,18 +84,32 @@ const AdminDashboard = () => {
             {userData?.role === "admin" && (
               <>
                 <div className="col-md-6">
-                  <div className="adminDashboardCard">Everyday Lifestyle</div>
+                  <Link
+                    to="/adminEverydayLifeStyle"
+                    style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard">Everyday Lifestyle</div>
+                  </Link>
                 </div>
                 <div className="col-md-6">
-                  <div className="adminDashboardCard">Health and Wellness</div>
+                  <Link
+                    to="/adminHealthAndWellness"
+                    style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard">
+                      Health And Wellness
+                    </div>
+                  </Link>
+                </div>{" "}
+                <div className="col-md-6">
+                  <Link
+                    to="/adminEventAndSuccessfulPeople"
+                    style={{textDecoration: "none"}}>
+                    <div className="adminDashboardCard">
+                      Event and Successful People
+                    </div>
+                  </Link>
                 </div>
                 <div className="col-md-6">
-                  <div className="adminDashboardCard">
-                    Event and Successful People
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="adminDashboardCard text-center">Shop</div>
+                  <div className="adminDashboardCard ">Shop</div>
                 </div>
               </>
             )}
