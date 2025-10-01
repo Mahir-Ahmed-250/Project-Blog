@@ -10,14 +10,12 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-
 import {Button, Card, Modal, Form} from "react-bootstrap";
 import {Editor} from "react-draft-wysiwyg";
 import {EditorState, convertToRaw, ContentState} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
 import Swal from "sweetalert2";
 import animationData from "../../../Assets/Loading2.json";
 import {Player} from "@lottiefiles/react-lottie-player";
@@ -36,6 +34,38 @@ const createEditorStateFromHTML = (html) => {
   );
   return EditorState.createWithContent(contentState);
 };
+
+// Compress image to stay under Firestore limit
+const compressImage = (file, maxWidth = 800, maxHeight = 800, quality = 0.7) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
+        resolve(compressedBase64);
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
 
 const AdminEventAndSuccessfulPeople = () => {
   const [blogs, setBlogs] = useState([]);
@@ -86,19 +116,21 @@ const AdminEventAndSuccessfulPeople = () => {
     fetchBlogs();
   }, []);
 
-  // Image upload
-  const handleImageChange = (e, forUpdate = false) => {
+  // Image upload handler
+  const handleImageChange = async (e, forUpdate = false) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (forUpdate) setCoverImage(event.target.result);
-      else setNewCoverImage(event.target.result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressedBase64 = await compressImage(file);
+      if (forUpdate) setCoverImage(compressedBase64);
+      else setNewCoverImage(compressedBase64);
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Failed to process image", "error");
+    }
   };
 
-  // Create new blog
+  // Create blog
   const handleCreate = async () => {
     if (!newTitle) return Swal.fire("Error", "Title is required", "warning");
     if (!newSerial || newSerial < 1)
@@ -205,15 +237,14 @@ const AdminEventAndSuccessfulPeople = () => {
       confirmButtonText: "Yes, delete it!",
     });
 
-    if (result.isConfirmed) {
-      try {
-        await deleteDoc(doc(db, "eventandsuccessfulpeople", id));
-        Swal.fire("Deleted!", "Blog has been deleted.", "success");
-        setBlogs(blogs.filter((b) => b.id !== id));
-      } catch (err) {
-        console.error(err);
-        Swal.fire("Error", "Failed to delete blog", "error");
-      }
+    if (!result.isConfirmed) return;
+    try {
+      await deleteDoc(doc(db, "eventandsuccessfulpeople", id));
+      Swal.fire("Deleted!", "Blog has been deleted.", "success");
+      setBlogs(blogs.filter((b) => b.id !== id));
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Failed to delete blog", "error");
     }
   };
 
@@ -247,12 +278,8 @@ const AdminEventAndSuccessfulPeople = () => {
       previewImage: true,
       inputAccept: "image/*",
       uploadCallback: (file) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve({data: {link: e.target.result}});
-          reader.onerror = (err) => reject(err);
-          reader.readAsDataURL(file);
-        }),
+        compressImage(file).then((base64) => ({data: {link: base64}})),
+      defaultSize: {height: "400px", width: "100%"},
     },
     embedded: {
       embedCallback: (link) => link,
@@ -293,8 +320,8 @@ const AdminEventAndSuccessfulPeople = () => {
                 <Button
                   variant="primary"
                   size="sm"
-                  onClick={() => handleEdit(blog)}
-                  className="me-2">
+                  className="me-2"
+                  onClick={() => handleEdit(blog)}>
                   Edit
                 </Button>
                 <Button
@@ -342,7 +369,13 @@ const AdminEventAndSuccessfulPeople = () => {
           <img
             src={newCoverImage}
             alt="Preview"
-            className="cover-preview mt-2"
+            style={{
+              width: "100%",
+              maxHeight: "400px",
+              objectFit: "cover",
+              marginTop: "10px",
+              borderRadius: "8px",
+            }}
           />
         )}
       </Form.Group>

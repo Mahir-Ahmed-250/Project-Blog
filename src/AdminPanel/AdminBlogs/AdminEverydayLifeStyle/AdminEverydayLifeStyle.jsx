@@ -35,6 +35,47 @@ const createEditorStateFromHTML = (html) => {
   return EditorState.createWithContent(contentState);
 };
 
+// Compress image to keep Base64 under Firestore 1MB limit
+const compressImage = (
+  file,
+  maxWidth = 800,
+  maxHeight = 800,
+  quality = 0.7
+) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
+        resolve(compressedBase64);
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
+
 const AdminEverydayLifeStyle = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,16 +125,18 @@ const AdminEverydayLifeStyle = () => {
     fetchBlogs();
   }, []);
 
-  // Image upload
-  const handleImageChange = (e, forUpdate = false) => {
+  // Image upload handler (compress and convert to Base64)
+  const handleImageChange = async (e, forUpdate = false) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (forUpdate) setCoverImage(event.target.result);
-      else setNewCoverImage(event.target.result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressedBase64 = await compressImage(file);
+      if (forUpdate) setCoverImage(compressedBase64);
+      else setNewCoverImage(compressedBase64);
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Failed to process image", "error");
+    }
   };
 
   // Create blog
@@ -244,11 +287,11 @@ const AdminEverydayLifeStyle = () => {
       inputAccept: "image/*",
       uploadCallback: (file) =>
         new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve({data: {link: e.target.result}});
-          reader.onerror = (err) => reject(err);
-          reader.readAsDataURL(file);
+          compressImage(file)
+            .then((base64) => resolve({data: {link: base64}}))
+            .catch((err) => reject(err));
         }),
+      defaultSize: {height: "400px", width: "100%"},
     },
     embedded: {
       embedCallback: (link) => link,
@@ -338,6 +381,13 @@ const AdminEverydayLifeStyle = () => {
             src={newCoverImage}
             alt="Preview"
             className="cover-preview mt-2"
+            style={{
+              width: "100%",
+              height: "500px",
+              objectFit: "cover",
+              borderRadius: "10px",
+              marginTop: "10px",
+            }}
           />
         )}
       </Form.Group>

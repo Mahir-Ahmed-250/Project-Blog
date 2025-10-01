@@ -5,7 +5,9 @@ import {Container, Button} from "react-bootstrap";
 import {db} from "../../../../Hooks/useFirebase";
 import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../../../Assets/Loading2.json";
+import animationData2 from "../../../../Assets/NoItemFound.json";
 import BlogContent from "../../BlogContent";
+import Title from "../../../../Components/Title/Title";
 
 const EverydayLifestyle = () => {
   const {id} = useParams();
@@ -46,7 +48,19 @@ const EverydayLifestyle = () => {
   }
 
   if (!blog) {
-    return <p className="text-center mt-5">Blog not found.</p>;
+    return (
+      <div className="text-center mt-5">
+        {" "}
+        <Player
+          autoplay
+          loop
+          src={animationData2}
+          style={{width: "100%", height: "60vh"}}
+        />
+        <br />
+        <Title title="Not Available" />
+      </div>
+    );
   }
 
   return (

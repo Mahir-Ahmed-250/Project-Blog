@@ -3,9 +3,11 @@ import {Container, Row, Col, Card, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {collection, getDocs, query, orderBy} from "firebase/firestore";
 import animationData from "../../../../Assets/Loading2.json";
+import animationData2 from "../../../../Assets/NoItemFound.json";
 import "./EveryDayLifestyles.css";
 import {db} from "../../../../Hooks/useFirebase";
 import {Player} from "@lottiefiles/react-lottie-player";
+import Title from "../../../../Components/Title/Title";
 
 const EverydayLifestyles = () => {
   const [posts, setPosts] = useState([]);
@@ -48,7 +50,19 @@ const EverydayLifestyles = () => {
   }
 
   if (!posts.length) {
-    return <p className="text-center mt-5">No blogs found.</p>;
+    return (
+      <div className="text-center mt-5">
+        {" "}
+        <Player
+          autoplay
+          loop
+          src={animationData2}
+          style={{width: "100%", height: "60vh"}}
+        />
+        <br />
+        <Title title="Not Available" />
+      </div>
+    );
   }
 
   const getColSize = (index) => {

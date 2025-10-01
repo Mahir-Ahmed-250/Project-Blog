@@ -4,8 +4,10 @@ import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../../../Hooks/useFirebase";
 import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../../../Assets/Loading2.json";
+import animationData2 from "../../../../Assets/NoItemFound.json";
 import BlogContent from "../../BlogContent";
 import {Button} from "react-bootstrap";
+import Title from "../../../../Components/Title/Title";
 
 const EventAndSuccessfulPeopleSingle = () => {
   const {id} = useParams(); // blog id from URL
@@ -41,12 +43,24 @@ const EventAndSuccessfulPeopleSingle = () => {
     );
   }
 
-  if (!blog) return <p className="text-center mt-5">Blog not found.</p>;
+  if (!blog)
+    return (
+      <div className="text-center mt-5">
+        {" "}
+        <Player
+          autoplay
+          loop
+          src={animationData2}
+          style={{width: "100%", height: "60vh"}}
+        />
+        <br />
+        <Title title="Not Available" />
+      </div>
+    );
 
   return (
     <div className="container mt-5">
       <h1>{blog.title}</h1>
-      <p>Serial: {blog.serial}</p>
 
       {blog.coverImage && (
         <img

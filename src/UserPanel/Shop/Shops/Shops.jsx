@@ -3,11 +3,12 @@ import "./Shops.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {collection, query, onSnapshot} from "firebase/firestore";
-
 import {Card} from "react-bootstrap";
 import {db} from "../../../Hooks/useFirebase";
 import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../../Assets/Loading2.json";
+import animationData2 from "../../../Assets/NoItemFound.json";
+import Title from "../../../Components/Title/Title";
 
 const Shops = () => {
   const [shops, setShops] = useState([]);
@@ -41,7 +42,21 @@ const Shops = () => {
       partialVisibilityGutter: 10,
     },
   };
-
+  if (!shops.length) {
+    return (
+      <div className="text-center mt-5">
+        {" "}
+        <Player
+          autoplay
+          loop
+          src={animationData2}
+          style={{width: "100%", height: "60vh"}}
+        />
+        <br />
+        <Title title="Not Available" />
+      </div>
+    );
+  }
   return (
     <>
       <div className="shopBannerContainer">

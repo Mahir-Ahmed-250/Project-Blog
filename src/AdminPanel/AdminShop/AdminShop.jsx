@@ -201,6 +201,8 @@ const AdminShop = () => {
             <Form.Group className="mb-2">
               <Form.Label>Description</Form.Label>
               <Form.Control
+                as="textarea"
+                rows={8}
                 type="text"
                 name="description"
                 value={formData.description}
