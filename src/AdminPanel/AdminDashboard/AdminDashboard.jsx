@@ -6,6 +6,7 @@ import Title from "../../Components/Title/Title";
 import "./AdminDashboard.css";
 import {Link} from "react-router-dom";
 import useFirebase from "../../Hooks/useFirebase";
+import UserDashboard from "../UserDashboard/UserDashboard";
 
 const AdminDashboard = () => {
   const {userData, loading} = useFirebase(); // get the user role & permissions
@@ -24,6 +25,54 @@ const AdminDashboard = () => {
   const canAccess = (permKey) =>
     userData?.role === "super-admin" ||
     userData?.permissions?.includes(permKey);
+
+  // ✅ If admin but has no permissions, show UserDashboard instead
+  if (
+    userData?.role === "admin" &&
+    (!userData?.permissions || userData?.permissions.length === 0)
+  ) {
+    return (
+      <>
+        {" "}
+        <div className="container">
+          <div className="row">
+            {/* Animation */}
+            <div className="col-md-6">
+              <div
+                style={{
+                  height: "80vh",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}>
+                <Player
+                  autoplay
+                  loop
+                  src={animationData}
+                  style={{height: "80vh", width: "100%"}}
+                />
+              </div>
+            </div>
+
+            {/* Dashboard Cards */}
+            <div className="col-md-6">
+              <Title title="Welcome to Admin Panel" />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <h2 className="userWarningText">
+                You Don't Have Enough Permission <br />
+                Please Contact With Admin
+              </h2>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="container">

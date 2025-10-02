@@ -31,13 +31,14 @@ const CreateAnAdmin = () => {
   const [emailInput, setEmailInput] = useState("");
   const [updating, setUpdating] = useState(false);
   const [admins, setAdmins] = useState([]);
+  const [users, setUsers] = useState([]);
 
   // Modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
 
-  // 🔹 Live fetch all admins
+  // 🔹 Live fetch admins
   useEffect(() => {
     if (!user || !userData) return;
 
@@ -50,7 +51,20 @@ const CreateAnAdmin = () => {
     return () => unsubscribe();
   }, [user, userData]);
 
-  // 🔹 Make user admin and ask for permissions
+  // 🔹 Live fetch normal users
+  useEffect(() => {
+    if (!user || !userData) return;
+
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("role", "==", "user"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setUsers(snapshot.docs.map((doc) => ({id: doc.id, ...doc.data()})));
+    });
+
+    return () => unsubscribe();
+  }, [user, userData]);
+
+  // 🔹 Make user admin via email
   const handleMakeAdmin = async () => {
     if (!emailInput.trim()) return toast.error("Enter an email address");
     setUpdating(true);
@@ -67,22 +81,66 @@ const CreateAnAdmin = () => {
       }
 
       const userDoc = querySnapshot.docs[0];
+      const userDataFound = userDoc.data();
+
+      // ❌ Prevent making super-admin admin
+      if (userDataFound.role === "super-admin") {
+        toast.error("You cannot assign admin role to a super-admin!");
+        setUpdating(false);
+        return;
+      }
+
+      // ❌ Prevent re-assigning if already admin
+      if (userDataFound.role === "admin") {
+        toast.error(`${userDataFound.email} is already an admin!`);
+        setUpdating(false);
+        return;
+      }
 
       // Assign role first
       await updateDoc(userDoc.ref, {role: "admin", permissions: []});
 
       // Open modal to select permissions
-      setSelectedAdmin({id: userDoc.id, email: userDoc.data().email});
+      setSelectedAdmin({id: userDoc.id, email: userDataFound.email});
       setSelectedPermissions([]);
       setShowModal(true);
 
       setEmailInput("");
-      toast.success(`${userDoc.data().email} is now an admin!`);
+      toast.success(`${userDataFound.email} is now an admin!`);
     } catch (err) {
       console.error(err);
       toast.error("Failed to update role: " + err.message);
     } finally {
       setUpdating(false);
+    }
+  };
+
+  // 🔹 Promote from normal user table
+  const handlePromoteUser = async (userObj) => {
+    // ❌ Prevent promoting self if super-admin
+    if (userObj.role === "super-admin") {
+      toast.error("Super-admin cannot promote himself!");
+      return;
+    }
+
+    // ❌ Prevent promoting if already admin
+    if (userObj.role === "admin") {
+      toast.error(`${userObj.email} is already an admin!`);
+      return;
+    }
+
+    try {
+      const userDocRef = doc(db, "users", userObj.id);
+      await updateDoc(userDocRef, {role: "admin", permissions: []});
+
+      setSelectedAdmin(userObj);
+      setSelectedPermissions([]);
+      setShowModal(true);
+
+      toast.success(`${userObj.email} is now an admin!`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to promote user: " + err.message);
     }
   };
 
@@ -109,7 +167,7 @@ const CreateAnAdmin = () => {
     }
   };
 
-  // 🔹 Open permission modal for existing admin
+  // 🔹 Open permission modal
   const handleOpenPermissions = (admin) => {
     setSelectedAdmin(admin);
     setSelectedPermissions(admin.permissions || []);
@@ -169,10 +227,12 @@ const CreateAnAdmin = () => {
               />
             </div>
 
-            {/* Form & Admin Table */}
+            {/* Form & Admin/User Tables */}
             <div className="col-md-6">
-              <Title title="Create An Admin" />
+              <Title title="Manage Admins" />
               <br />
+
+              {/* Email input option */}
               <input
                 type="email"
                 placeholder="Enter user email"
@@ -187,8 +247,9 @@ const CreateAnAdmin = () => {
                 {updating ? "Updating..." : "Make Admin"}
               </button>
 
+              {/* Current Admins */}
               <h5>Current Admins</h5>
-              <div className="table-responsive">
+              <div className="table-responsive mb-5">
                 <table className="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -228,7 +289,48 @@ const CreateAnAdmin = () => {
                     ) : (
                       <tr>
                         <td colSpan="4" className="text-center">
-                          <Spinner />
+                          No Admin Found!
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Normal Users */}
+              <h5>Normal Users</h5>
+              <div className="table-responsive">
+                <table className="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Email</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.length > 0 ? (
+                      users.map((usr) => (
+                        <tr key={usr.id}>
+                          <td>{usr.email}</td>
+                          <td>{usr.username}</td>
+                          <td>
+                            {usr.role !== "super-admin" ? (
+                              <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() => handlePromoteUser(usr)}>
+                                Make Admin
+                              </button>
+                            ) : (
+                              <span className="text-muted">Super Admin</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="3" className="text-center">
+                          No User Found!
                         </td>
                       </tr>
                     )}
@@ -251,7 +353,7 @@ const CreateAnAdmin = () => {
                   <Form.Check
                     key={perm.key}
                     type="checkbox"
-                    id={perm.key} // important for label click
+                    id={perm.key}
                     label={perm.label}
                     checked={selectedPermissions.includes(perm.key)}
                     onChange={() => handleTogglePermission(perm.key)}

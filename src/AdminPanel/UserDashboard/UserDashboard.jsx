@@ -22,7 +22,7 @@ const UserDashboard = () => {
 
           <div>
             <h2 className="userWarningText">
-              You Dont Have Enough Permission <br />
+              You Don't Have Enough Permission <br />
               Please Contact With Admin
             </h2>
           </div>
