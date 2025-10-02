@@ -8,7 +8,8 @@ import {Link} from "react-router-dom";
 import useFirebase from "../../Hooks/useFirebase";
 
 const AdminDashboard = () => {
-  const {userData, loading} = useFirebase(); // get the user role
+  const {userData, loading} = useFirebase(); // get the user role & permissions
+
   if (loading)
     return (
       <Player
@@ -18,6 +19,12 @@ const AdminDashboard = () => {
         style={{height: "80vh", width: "100%"}}
       />
     );
+
+  // Helper to check if the admin can access a section
+  const canAccess = (permKey) =>
+    userData?.role === "super-admin" ||
+    userData?.permissions?.includes(permKey);
+
   return (
     <div className="container">
       <div className="row">
@@ -42,90 +49,61 @@ const AdminDashboard = () => {
         {/* Dashboard Cards */}
         <div className="col-md-6">
           {userData?.role === "super-admin" ? (
-            <>
-              <Title title="Welcome to Super Admin Panel" />
-            </>
+            <Title title="Welcome to Super Admin Panel" />
           ) : (
-            <>
-              <Title title="Welcome to Admin Panel" />
-            </>
+            <Title title="Welcome to Admin Panel" />
           )}
           <br />
           <br />
           <div className="row">
-            {/* Only super-admin can see Create Admin */}
+            {/* Super-admin only */}
             {userData?.role === "super-admin" && (
-              <>
-                <div className="col-md-6">
-                  <Link to="/createAnAdmin" style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">Create an Admin</div>
-                  </Link>
-                </div>
-                <div className="col-md-6">
-                  <Link
-                    to="/adminEverydayLifeStyle"
-                    style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">Everyday Lifestyle</div>
-                  </Link>
-                </div>
-                <div className="col-md-6">
-                  <Link
-                    to="/adminHealthAndWellness"
-                    style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">
-                      Health And Wellness
-                    </div>
-                  </Link>
-                </div>
-                <div className="col-md-6">
-                  <Link
-                    to="/adminEventAndSuccessfulPeople"
-                    style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">
-                      Event and Successful People
-                    </div>
-                  </Link>
-                </div>
-                <div className="col-md-12">
-                  <Link to="/adminShop" style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard text-center">Shop</div>
-                  </Link>
-                </div>
-              </>
+              <div className="col-md-6">
+                <Link to="/createAnAdmin" style={{textDecoration: "none"}}>
+                  <div className="adminDashboardCard">Create an Admin</div>
+                </Link>
+              </div>
             )}
-            {userData?.role === "admin" && (
-              <>
-                <div className="col-md-6">
-                  <Link
-                    to="/adminEverydayLifeStyle"
-                    style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">Everyday Lifestyle</div>
-                  </Link>
-                </div>
-                <div className="col-md-6">
-                  <Link
-                    to="/adminHealthAndWellness"
-                    style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">
-                      Health And Wellness
-                    </div>
-                  </Link>
-                </div>{" "}
-                <div className="col-md-6">
-                  <Link
-                    to="/adminEventAndSuccessfulPeople"
-                    style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">
-                      Event and Successful People
-                    </div>
-                  </Link>
-                </div>
-                <div className="col-md-6">
-                  <Link to="/adminShop" style={{textDecoration: "none"}}>
-                    <div className="adminDashboardCard">Shop</div>
-                  </Link>
-                </div>
-              </>
+
+            {/* Permission-based cards */}
+            {canAccess("everyday-lifestyle") && (
+              <div className="col-md-6">
+                <Link
+                  to="/adminEverydayLifeStyle"
+                  style={{textDecoration: "none"}}>
+                  <div className="adminDashboardCard">Everyday Lifestyle</div>
+                </Link>
+              </div>
+            )}
+
+            {canAccess("health-wellness") && (
+              <div className="col-md-6">
+                <Link
+                  to="/adminHealthAndWellness"
+                  style={{textDecoration: "none"}}>
+                  <div className="adminDashboardCard">Health And Wellness</div>
+                </Link>
+              </div>
+            )}
+
+            {canAccess("event-successful-people") && (
+              <div className="col-md-6">
+                <Link
+                  to="/adminEventAndSuccessfulPeople"
+                  style={{textDecoration: "none"}}>
+                  <div className="adminDashboardCard">
+                    Event and Successful People
+                  </div>
+                </Link>
+              </div>
+            )}
+
+            {canAccess("shop") && (
+              <div className="col-md-12">
+                <Link to="/adminShop" style={{textDecoration: "none"}}>
+                  <div className="adminDashboardCard text-center">Shop</div>
+                </Link>
+              </div>
             )}
           </div>
         </div>

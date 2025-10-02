@@ -14,6 +14,9 @@ import {db} from "../../Hooks/useFirebase";
 import Swal from "sweetalert2";
 import {Player} from "@lottiefiles/react-lottie-player";
 import animationData from "../../Assets/Loading2.json";
+import animationData2 from "../../Assets/NoItemFound.json";
+
+// ... your imports remain the same
 
 const AdminShop = () => {
   const [shops, setShops] = useState([]);
@@ -53,30 +56,42 @@ const AdminShop = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData({...formData, image: reader.result}); // Base64 string
+        setFormData({...formData, image: reader.result});
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Create or update
+  // Create or update with validation
   const handleSave = async () => {
+    const {name, description, image, link} = formData;
+
+    // Basic validation
+    if (!name || !description || !image || !link) {
+      Swal.fire("Error", "All fields are required!", "warning");
+      return;
+    }
+
     try {
-      // Normalize affiliate link (add https:// if missing)
+      // Normalize affiliate link
       let finalData = {...formData};
-      if (finalData.link && !/^https?:\/\//i.test(finalData.link)) {
+      if (!/^https?:\/\//i.test(finalData.link)) {
         finalData.link = "https://" + finalData.link;
       }
 
       if (editingShop) {
         const shopRef = doc(db, "shop", editingShop.id);
         await updateDoc(shopRef, finalData);
+        Swal.fire("Success", "Shop updated successfully!", "success");
       } else {
         await addDoc(collection(db, "shop"), finalData);
+        Swal.fire("Success", "Shop added successfully!", "success");
       }
+
       handleClose();
     } catch (error) {
       console.error("Error saving shop:", error);
+      Swal.fire("Error", "Something went wrong.", "error");
     }
   };
 
@@ -103,7 +118,6 @@ const AdminShop = () => {
     });
   };
 
-  // Open modal for edit
   const handleEdit = (shop) => {
     setEditingShop(shop);
     setFormData({
@@ -115,12 +129,12 @@ const AdminShop = () => {
     setShowModal(true);
   };
 
-  // Reset modal
   const handleClose = () => {
     setShowModal(false);
     setEditingShop(null);
     setFormData({name: "", description: "", image: "", link: ""});
   };
+
   if (loading)
     return (
       <Player
@@ -130,59 +144,70 @@ const AdminShop = () => {
         style={{width: "100%", height: "100vh"}}
       />
     );
+
   return (
     <div className="container">
       <Title title="Manage Shop" />
 
-      {/* Add New Shop Button */}
       <div className="mb-3 text-end">
         <Button onClick={() => setShowModal(true)}>+ Add Shop</Button>
       </div>
 
-      {/* Grid Display */}
-      <Row>
-        {shops.map((shop) => (
-          <Col key={shop.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-            <Card className="shadow h-100">
-              <Card.Img
-                variant="top"
-                src={shop.image}
-                height="150"
-                style={{objectFit: "cover"}}
-              />
-              <Card.Body>
-                <Card.Title>{shop.name}</Card.Title>
-                <Card.Text>{shop.description}</Card.Text>
-                {shop.link && (
-                  <a
-                    href={shop.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-sm btn-primary w-100 mb-2">
-                    Visit Link
-                  </a>
-                )}
-                <div className="d-flex justify-content-between">
-                  <Button
-                    variant="warning"
-                    size="sm"
-                    onClick={() => handleEdit(shop)}>
-                    Edit
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => handleDelete(shop.id)}>
-                    Delete
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+      {!shops.length ? (
+        <div className="text-center">
+          <Player
+            autoplay
+            loop
+            src={animationData2}
+            style={{width: "100%", height: "60vh"}}
+          />
+          <br />
+          <Title title="Not Available" />
+        </div>
+      ) : (
+        <Row>
+          {shops.map((shop) => (
+            <Col key={shop.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+              <Card className="shadow h-100">
+                <Card.Img
+                  variant="top"
+                  src={shop.image}
+                  height="150"
+                  style={{objectFit: "cover"}}
+                />
+                <Card.Body>
+                  <Card.Title>{shop.name}</Card.Title>
+                  <Card.Text>{shop.description}</Card.Text>
+                  {shop.link && (
+                    <a
+                      href={shop.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-sm btn-primary w-100 mb-2">
+                      Visit Link
+                    </a>
+                  )}
+                  <div className="d-flex justify-content-between">
+                    <Button
+                      variant="warning"
+                      size="sm"
+                      onClick={() => handleEdit(shop)}>
+                      Edit
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleDelete(shop.id)}>
+                      Delete
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
 
-      {/* Modal for Add/Edit */}
       <Modal show={showModal} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>{editingShop ? "Edit Shop" : "Add Shop"}</Modal.Title>
@@ -196,6 +221,7 @@ const AdminShop = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-2">
@@ -203,10 +229,10 @@ const AdminShop = () => {
               <Form.Control
                 as="textarea"
                 rows={8}
-                type="text"
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-2">
@@ -215,6 +241,7 @@ const AdminShop = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
+                required={!editingShop} // required only when adding
               />
               {formData.image && (
                 <img
@@ -236,6 +263,7 @@ const AdminShop = () => {
                 value={formData.link}
                 onChange={handleChange}
                 placeholder="https://affiliate-link.com"
+                required
               />
             </Form.Group>
           </Form>

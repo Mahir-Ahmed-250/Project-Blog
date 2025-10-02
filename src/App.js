@@ -29,6 +29,7 @@ import AdminHealthAndWellness from "./AdminPanel/AdminBlogs/AdminHealthAndWellne
 import AdminEventAndSuccessfulPeople from "./AdminPanel/AdminBlogs/AdminEventAndSuccessfulPeople/AdminEventAndSuccessfulPeople";
 import HealthAndWellness from "./UserPanel/Blog/HealthAndWellness/HealthAndWellness/HealthAndWellness";
 import AdminShop from "./AdminPanel/AdminShop/AdminShop";
+import AdminPermissionGuard from "./AdminPanel/AdminPermissionGuard/AdminPermissionGuard";
 
 
 
@@ -112,36 +113,36 @@ function App() {
         <Route
           path="/adminEverydayLifeStyle"
           element={
-            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
+            <AdminPermissionGuard permissionKey="everyday-lifestyle">
               <AdminEverydayLifeStyle />
-            </PrivateRoute>
+            </AdminPermissionGuard>
           }
         />
         {/* Admin Health And Wellness Editor */}
         <Route
           path="/adminHealthAndWellness"
           element={
-            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
+            <AdminPermissionGuard permissionKey="health-wellness">
               <AdminHealthAndWellness />
-            </PrivateRoute>
+            </AdminPermissionGuard>
           }
         />
         {/* Admin Event And Successful People Editor */}
         <Route
           path="/adminEventAndSuccessfulPeople"
           element={
-            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
+            <AdminPermissionGuard permissionKey="event-successful-people">
               <AdminEventAndSuccessfulPeople />
-            </PrivateRoute>
+            </AdminPermissionGuard>
           }
         />
         {/* Admin Shop Editor */}
         <Route
           path="/adminShop"
           element={
-            <PrivateRoute allowedRoles={["super-admin", "admin"]}>
+            <AdminPermissionGuard permissionKey="shop">
               <AdminShop />
-            </PrivateRoute>
+            </AdminPermissionGuard>
           }
         />
         {/* Not Found */}

@@ -70,7 +70,11 @@ const EventAndSuccessfulPeopleSingle = () => {
           className="mb-3"
         />
       )}
-
+      <p style={{color: "#666", fontSize: "14px"}}>
+        {blog.createdAt?.toDate
+          ? blog.createdAt.toDate().toLocaleDateString()
+          : "Unknown date"}
+      </p>
       <BlogContent content={blog.content} />
 
       <Button
