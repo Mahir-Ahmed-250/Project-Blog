@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Player } from "@lottiefiles/react-lottie-player";
-import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {Player} from "@lottiefiles/react-lottie-player";
+import {toast} from "react-toastify";
+import {Link, useNavigate} from "react-router-dom";
 import useFirebase from "../../Hooks/useFirebase";
 import animationData from "../../Assets/SignUp.json";
 import Button from "../../Components/Button/Button";
@@ -21,7 +21,7 @@ const SignUp = () => {
   const [previewImg, setPreviewImg] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { signUpUser } = useFirebase();
+  const {signUpUser} = useFirebase();
   const navigate = useNavigate();
 
   const togglePassword = () => setPasswordShown(!passwordShown);
@@ -73,19 +73,18 @@ const SignUp = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-          }}
-        >
+          }}>
           <Player
             autoplay
             loop
             src={animationData}
-            style={{ height: "80vh", width: "300px" }}
+            style={{height: "80vh", width: "300px"}}
           />
         </div>
       ) : (
         <>
           <center>
-            <Title title="Admin Signup" />
+            <Title title="Signup" />
           </center>
 
           <div className="container loginContainer">
@@ -94,7 +93,7 @@ const SignUp = () => {
                 autoplay
                 loop
                 src={animationData}
-                style={{ width: "100%", height: "70vh" }}
+                style={{width: "100%", height: "70vh"}}
               />
             </div>
 
@@ -109,14 +108,14 @@ const SignUp = () => {
                       width="100"
                       height="100"
                       className="rounded-circle border mb-2"
-                      style={{ cursor: "pointer", objectFit: "cover" }}
+                      style={{cursor: "pointer", objectFit: "cover"}}
                     />
                   </label>
                   <input
                     id="profileImg"
                     type="file"
                     accept="image/*"
-                    style={{ display: "none" }}
+                    style={{display: "none"}}
                     onChange={handleImageChange}
                   />
                   <p className="small text-muted">Set Your Profile Picture</p>

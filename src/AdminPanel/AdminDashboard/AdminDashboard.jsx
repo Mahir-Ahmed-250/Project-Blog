@@ -6,7 +6,6 @@ import Title from "../../Components/Title/Title";
 import "./AdminDashboard.css";
 import {Link} from "react-router-dom";
 import useFirebase from "../../Hooks/useFirebase";
-import UserDashboard from "../UserDashboard/UserDashboard";
 
 const AdminDashboard = () => {
   const {userData, loading} = useFirebase(); // get the user role & permissions
@@ -151,6 +150,15 @@ const AdminDashboard = () => {
               <div className="col-md-12">
                 <Link to="/adminShop" style={{textDecoration: "none"}}>
                   <div className="adminDashboardCard text-center">Shop</div>
+                </Link>
+              </div>
+            )}
+            {canAccess("comments") && (
+              <div className="col-md-12">
+                <Link to="/adminComments" style={{textDecoration: "none"}}>
+                  <div className="adminDashboardCard text-center">
+                    Manage Comments
+                  </div>
                 </Link>
               </div>
             )}

@@ -30,6 +30,7 @@ import AdminEventAndSuccessfulPeople from "./AdminPanel/AdminBlogs/AdminEventAnd
 import HealthAndWellness from "./UserPanel/Blog/HealthAndWellness/HealthAndWellness/HealthAndWellness";
 import AdminShop from "./AdminPanel/AdminShop/AdminShop";
 import AdminPermissionGuard from "./AdminPanel/AdminPermissionGuard/AdminPermissionGuard";
+import AdminCommentManage from "./AdminPanel/AdminCommentManage/AdminCommentManage";
 
 
 
@@ -67,7 +68,6 @@ function App() {
         <Route path="/blog/everyday-lifestyle/:id" element={<EverydayLifestyle />} />
         <Route path="/blog/health-and-wellness/:id" element={<HealthAndWellness />} />
         <Route path="/blog/event-and-successful-people/:id" element={<EventAndSuccessfulPeople />} />
-
         <Route path="/contact" element={<ContactMe />} />
         <Route path="/about" element={<AboutMe />} />
         <Route path="/shops" element={<Shops />} />
@@ -142,6 +142,15 @@ function App() {
           element={
             <AdminPermissionGuard permissionKey="shop">
               <AdminShop />
+            </AdminPermissionGuard>
+          }
+        />
+        {/* Admin Comment Manage */}
+        <Route
+          path="/adminComments"
+          element={
+            <AdminPermissionGuard permissionKey="comments">
+              <AdminCommentManage />
             </AdminPermissionGuard>
           }
         />

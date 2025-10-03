@@ -42,6 +42,19 @@ const Shops = () => {
       partialVisibilityGutter: 10,
     },
   };
+  if (loading) {
+    return (
+      <div className="text-center mt-5">
+        {" "}
+        <Player
+          autoplay
+          loop
+          src={animationData}
+          style={{width: "100%", height: "100vh"}}
+        />
+      </div>
+    );
+  }
   if (!shops.length) {
     return (
       <div className="text-center mt-5">

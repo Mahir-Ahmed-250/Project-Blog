@@ -37,7 +37,7 @@ const Login = () => {
     <>
       <>
         <center>
-          <Title title="Admin Login" />
+          <Title title="Login" />
         </center>
         <div className="container loginContainer">
           <div>

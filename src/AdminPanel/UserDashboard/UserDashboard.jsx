@@ -17,7 +17,7 @@ const UserDashboard = () => {
             autoplay
             loop
             src={animationData}
-            style={{height: "70vh", width: "100%"}}
+            style={{height: "70vh", width: "80%"}}
           />
 
           <div>
