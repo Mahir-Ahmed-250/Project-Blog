@@ -16,7 +16,7 @@ import {
 } from "firebase/firestore";
 import useFirebase from "../../Hooks/useFirebase";
 import {Navigate} from "react-router-dom";
-import {Modal, Button, Form, Spinner} from "react-bootstrap";
+import {Modal, Button, Form} from "react-bootstrap";
 import Swal from "sweetalert2";
 
 const PERMISSION_OPTIONS = [

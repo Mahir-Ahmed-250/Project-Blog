@@ -12,7 +12,7 @@ const HomeContactMe = () => {
     message: "",
   });
 
-  const [error, setError] = useState("");
+  const [setError] = useState("");
 
   // Single toast slot ID
   const toastId = "contact-toast";

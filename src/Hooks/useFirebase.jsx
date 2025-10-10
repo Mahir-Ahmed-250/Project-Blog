@@ -24,7 +24,7 @@ import {useNavigate} from "react-router-dom";
 const firebaseApp = initializeFirebase();
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
-const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
+const IMGBB_API_KEY = process.env.REACT_APP_IMGBB_API_KEY;
 
 const useFirebase = () => {
   const [user, setUser] = useState(null);
